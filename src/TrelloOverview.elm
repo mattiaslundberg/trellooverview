@@ -35,13 +35,6 @@ type alias Model =
     }
 
 
-
--- model : Model
--- model =
---     Model False
--- UPDATE
-
-
 type Msg
     = IsAuhorized
     | AuthorizedStatus Bool

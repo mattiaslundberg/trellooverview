@@ -1,0 +1,12 @@
+{
+  "name": "TrelloOverview",
+  "version": "1.0.0",
+  "repository": {},
+  "author": "Mattias Lundberg <mattiaslundberg@openmailbox.org>",
+  "license": "MIT",
+  "dependencies": {
+    "elm": "^0.18.0",
+    "elm-format": "^0.5.2",
+    "elm-test": "^0.18.2"
+  }
+}

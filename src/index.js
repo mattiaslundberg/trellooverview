@@ -34,7 +34,7 @@ app.ports.trelloListBoards.subscribe(function() {
         "/members/me/boards",
         {fields: "name, id"},
         function(boards) {
-          app.ports.trelloBoards.send(boards.map(function(b) { return b.name }))
+          app.ports.trelloBoards.send(JSON.stringify(boards))
         },
         function(error) {
           console.log(error)

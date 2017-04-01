@@ -1,6 +1,7 @@
 module TrelloOverview exposing (..)
 
 import Trello exposing (..)
+import TrelloBoard exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, class, classList)
@@ -23,7 +24,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    Model False ! [trelloAuthorize ""]
+    Model False [] ! [ trelloAuthorize "" ]
 
 
 
@@ -32,13 +33,15 @@ init =
 
 type alias Model =
     { isAuthorized : Bool
+    , boards : List TrelloBoard
     }
 
 
 type Msg
     = IsAuhorized
     | AuthorizedStatus Bool
-    | BoardList (List String)
+    | BoardList String
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -47,28 +50,39 @@ update msg model =
             ( model, trelloAuthorized "" )
 
         AuthorizedStatus isAuthorized ->
-            ( Model isAuthorized, trelloListBoards "" )
+            ( { model | isAuthorized = isAuthorized }, trelloListBoards "" )
 
         BoardList boards ->
-            ( model, Cmd.none )
+            ( { model | boards = decodeBoards boards }, Cmd.none )
+
 
 
 -- SUBSCRIPTIONS
 
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-    [ trelloAuthorizedResponse AuthorizedStatus
-    , trelloBoards BoardList
-    ]
+        [ trelloAuthorizedResponse AuthorizedStatus
+        , trelloBoards BoardList
+        ]
 
 
 
 -- VIEW
 
 
+displayBoard : TrelloBoard -> Html Msg
+displayBoard board =
+    div [] [ text board.name ]
+
+
 view : Model -> Html Msg
 view model =
     div
         [ class "wrapper" ]
-        [ text ("authorized: " ++ toString model.isAuthorized) ]
+        [ div []
+            [ text ("authorized: " ++ toString model.isAuthorized)
+            ]
+        , div [] (List.map displayBoard model.boards)
+        ]

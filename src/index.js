@@ -12,7 +12,7 @@ app.ports.trelloAuthorized.subscribe(function() {
 
 app.ports.trelloAuthorize.subscribe(function() {
   Trello.authorize({
-    type: 'popup',
+    type: 'redirect',
     name: 'Trello Overview',
     scope: {
       read: 'true',
@@ -27,4 +27,17 @@ app.ports.trelloAuthorize.subscribe(function() {
       console.log("Error")
     }
   })
+})
+
+app.ports.trelloListBoards.subscribe(function() {
+    Trello.get(
+        "/members/me/boards",
+        {fields: "name, id"},
+        function(boards) {
+          app.ports.trelloBoards.send(boards.map(function(b) { return b.name }))
+        },
+        function(error) {
+          console.log(error)
+        }
+    )
 })

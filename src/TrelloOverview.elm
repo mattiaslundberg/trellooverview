@@ -1,6 +1,6 @@
 module TrelloOverview exposing (..)
 
-import Trello exposing (trelloAuthorized, trelloAuthorizedResponse, trelloAuthorize)
+import Trello exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, class, classList)
@@ -38,7 +38,7 @@ type alias Model =
 type Msg
     = IsAuhorized
     | AuthorizedStatus Bool
-
+    | BoardList (List String)
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -47,14 +47,20 @@ update msg model =
             ( model, trelloAuthorized "" )
 
         AuthorizedStatus isAuthorized ->
-            ( Model isAuthorized, Cmd.none )
+            ( Model isAuthorized, trelloListBoards "" )
+
+        BoardList boards ->
+            ( model, Cmd.none )
 
 
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    trelloAuthorizedResponse AuthorizedStatus
+    Sub.batch
+    [ trelloAuthorizedResponse AuthorizedStatus
+    , trelloBoards BoardList
+    ]
 
 
 

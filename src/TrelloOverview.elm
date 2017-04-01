@@ -1,6 +1,6 @@
 module TrelloOverview exposing (..)
 
-import Trello exposing (trelloAuthorized, trelloAuthorizeResponsed)
+import Trello exposing (trelloAuthorized, trelloAuthorizedResponse, trelloAuthorize)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, class, classList)
@@ -15,15 +15,15 @@ main : Program Never Model Msg
 main =
     program
         { init = init
-        , subscriptions = always Sub.none
         , view = view
         , update = update
+        , subscriptions = subscriptions
         }
 
 
 init : ( Model, Cmd Msg )
 init =
-    Model False ! []
+    Model False ! [trelloAuthorize ""]
 
 
 
@@ -48,6 +48,13 @@ update msg model =
 
         AuthorizedStatus isAuthorized ->
             ( Model isAuthorized, Cmd.none )
+
+
+-- SUBSCRIPTIONS
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    trelloAuthorizedResponse AuthorizedStatus
 
 
 

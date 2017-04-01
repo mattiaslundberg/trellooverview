@@ -43,14 +43,14 @@ type alias Model =
 
 
 type Msg
-    = Check
+    = IsAuhorized
     | AuthorizedStatus Bool
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Check ->
+        IsAuhorized ->
             ( model, trelloAuthorized "" )
 
         AuthorizedStatus isAuthorized ->

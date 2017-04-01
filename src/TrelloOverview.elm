@@ -41,6 +41,7 @@ type Msg
     = IsAuhorized
     | AuthorizedStatus Bool
     | BoardList String
+    | SelectBoard TrelloBoard
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -54,6 +55,9 @@ update msg model =
 
         BoardList boards ->
             ( { model | boards = decodeBoards boards }, Cmd.none )
+
+        SelectBoard board ->
+            ( { model | boards = toogleBoard board model.boards }, Cmd.none )
 
 
 
@@ -74,7 +78,7 @@ subscriptions model =
 
 displayBoard : TrelloBoard -> Html Msg
 displayBoard board =
-    div [] [ text board.name ]
+    div [ onClick (SelectBoard board) ] [ text (board.name ++ (toString board.show)) ]
 
 
 view : Model -> Html Msg

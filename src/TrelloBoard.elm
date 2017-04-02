@@ -1,7 +1,7 @@
 module TrelloBoard exposing (..)
 
 import Json.Decode exposing (map2, field, int, string, Decoder, decodeString, list)
-import List exposing (head, tail, filter, map, length)
+import List exposing (head, tail, filter, map, length, append)
 import TrelloCard exposing (..)
 
 
@@ -47,12 +47,13 @@ decodeBoards payload =
             val
 
         Err message ->
+          Debug.log message
             []
 
 
 updateCards : (List TrelloCard) -> TrelloBoard -> TrelloBoard
 updateCards cards board =
-  { board | cards = filter (\b -> b.boardId == board.id) cards }
+  { board | cards = filter (\c -> c.boardId == board.id) (append board.cards cards) }
 
 
 decodeCards : List TrelloBoard -> String -> List TrelloBoard
@@ -62,4 +63,5 @@ decodeCards boards payload =
         map (updateCards cards) boards
 
       Err message ->
+        Debug.log message
         boards

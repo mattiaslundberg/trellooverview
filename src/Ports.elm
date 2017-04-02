@@ -16,6 +16,12 @@ port trelloListBoards : String -> Cmd msg
 port trelloBoards : (String -> msg) -> Sub msg
 
 
+port trelloListCards : String -> Cmd msg
+
+
+port trelloCards : (String -> msg) -> Sub msg
+
+
 port localStorageSet : String -> Cmd msg
 
 

@@ -42,6 +42,20 @@ app.ports.trelloListBoards.subscribe(function() {
     )
 })
 
+app.ports.trelloListCards.subscribe(function(id) {
+    console.log("list cards for board", id)
+    Trello.get(
+        "/boards/" + id + "/lists",
+        {},
+        function(cards) {
+            app.ports.trelloCards.send(JSON.stringify(cards))
+        },
+        function(error) {
+            console.log(error)
+        }
+    )
+})
+
 
 // Connect localStorage to application
 app.ports.localStorageSet.subscribe(function(key, value) {

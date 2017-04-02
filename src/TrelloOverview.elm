@@ -5,8 +5,7 @@ import TrelloBoard exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, class, classList)
-import Random exposing (..)
-import Array exposing (..)
+import List exposing (..)
 import Tuple
 import Task
 import Time
@@ -41,6 +40,7 @@ type Msg
     = IsAuhorized
     | AuthorizedStatus Bool
     | BoardList String
+    | CardList String
     | SelectBoard TrelloBoard
     | LocalStorageGot String
 
@@ -55,7 +55,13 @@ update msg model =
             ( { model | isAuthorized = isAuthorized }, trelloListBoards "" )
 
         BoardList boards ->
-            ( { model | boards = decodeBoards boards }, Cmd.none )
+            let
+                updatedBoards = decodeBoards boards
+            in
+                ( { model | boards = updatedBoards }, Cmd.batch (map trelloListCards (map (\b -> b.id) updatedBoards)) )
+
+        CardList cards ->
+            ( { model | boards = decodeCards model.boards cards }, Cmd.none )
 
         SelectBoard board ->
             ( { model | boards = toogleBoard board model.boards }, Cmd.none )
@@ -74,12 +80,17 @@ subscriptions model =
         [ trelloAuthorizedResponse AuthorizedStatus
         , trelloBoards BoardList
         , localStorageGot LocalStorageGot
+        , trelloCards CardList
         ]
 
 
 
 -- VIEW
 
+displayCardSummary : TrelloBoard -> Html Msg
+displayCardSummary board =
+    div [ class "card-summary" ] [
+        text (board.name ++ " " ++ (toString (cardCount board)) ++ " cards") ]
 
 displayBoard : TrelloBoard -> Html Msg
 displayBoard board =
@@ -94,4 +105,6 @@ view model =
             [ text ("authorized: " ++ toString model.isAuthorized)
             ]
         , div [] (List.map displayBoard model.boards)
+        -- TODO: Filter based on show
+        , div [class "board-wrapper"] (List.map displayCardSummary model.boards)
         ]

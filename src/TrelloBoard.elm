@@ -1,7 +1,7 @@
 module TrelloBoard exposing (..)
 
 import Json.Decode exposing (map2, field, int, string, Decoder, decodeString, list)
-import List exposing (head, tail, filter, map)
+import List exposing (head, tail, filter, map, length)
 
 
 -- MODEL
@@ -14,6 +14,11 @@ type alias TrelloBoard =
     , name :
         String
     }
+
+
+cardCount : TrelloBoard -> Int
+cardCount board =
+  length board.cards
 
 
 toogleVisibilityIfMatch : TrelloBoard -> TrelloBoard -> TrelloBoard
@@ -42,3 +47,16 @@ decodeBoards payload =
 
         Err message ->
             []
+
+cardDecoder : Decoder String
+cardDecoder =
+    field "name" string
+
+decodeCards : List TrelloBoard -> String -> List TrelloBoard
+decodeCards boards payload =
+    case decodeString (list cardDecoder) payload of
+      Ok val ->
+        boards
+
+      Err message ->
+        boards

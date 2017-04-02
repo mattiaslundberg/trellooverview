@@ -2,6 +2,7 @@ module TrelloOverview exposing (..)
 
 import Ports exposing (..)
 import TrelloBoard exposing (..)
+import TrelloCard exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, class, classList)

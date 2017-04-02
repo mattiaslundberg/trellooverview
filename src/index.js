@@ -41,3 +41,14 @@ app.ports.trelloListBoards.subscribe(function() {
         }
     )
 })
+
+
+// Connect localStorage to application
+app.ports.localStorageSet.subscribe(function(key, value) {
+    localStorage.set(key, value)
+})
+
+app.ports.localStorageGet.subscribe(function(key) {
+    var value = localStorage.get(key)
+    app.ports.localStorageGot.send(JSON.stringify([key, value]))
+})

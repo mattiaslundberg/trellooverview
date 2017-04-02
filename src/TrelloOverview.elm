@@ -1,6 +1,6 @@
 module TrelloOverview exposing (..)
 
-import Trello exposing (..)
+import Ports exposing (..)
 import TrelloBoard exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
 import Html.Events exposing (onClick)
@@ -42,6 +42,7 @@ type Msg
     | AuthorizedStatus Bool
     | BoardList String
     | SelectBoard TrelloBoard
+    | LocalStorageGot String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -59,6 +60,9 @@ update msg model =
         SelectBoard board ->
             ( { model | boards = toogleBoard board model.boards }, Cmd.none )
 
+        LocalStorageGot value ->
+            ( model, Cmd.none )
+
 
 
 -- SUBSCRIPTIONS
@@ -69,6 +73,7 @@ subscriptions model =
     Sub.batch
         [ trelloAuthorizedResponse AuthorizedStatus
         , trelloBoards BoardList
+        , localStorageGot LocalStorageGot
         ]
 
 

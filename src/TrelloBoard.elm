@@ -16,11 +16,6 @@ type alias TrelloBoard =
     }
 
 
-idsMatch : TrelloBoard -> TrelloBoard -> Bool
-idsMatch a b =
-    a.id == b.id
-
-
 toogleVisibilityIfMatch : TrelloBoard -> TrelloBoard -> TrelloBoard
 toogleVisibilityIfMatch a b =
     if a.id == b.id then

@@ -42,13 +42,13 @@ app.ports.trelloListBoards.subscribe(function() {
     )
 })
 
-app.ports.trelloListCards.subscribe(function(id) {
+app.ports.trelloListLists.subscribe(function(id) {
     console.log("list cards for board", id)
     Trello.get(
         "/boards/" + id + "/lists",
         {},
         function(cards) {
-            app.ports.trelloCards.send(JSON.stringify(cards))
+            app.ports.trelloList.send(JSON.stringify(cards))
         },
         function(error) {
             console.log(error)

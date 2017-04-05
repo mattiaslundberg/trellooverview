@@ -2,7 +2,7 @@ module TrelloOverview exposing (..)
 
 import Ports exposing (..)
 import TrelloBoard exposing (..)
-import TrelloCard exposing (..)
+import TrelloList exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, class, classList)
@@ -41,7 +41,7 @@ type Msg
     = IsAuhorized
     | AuthorizedStatus Bool
     | BoardList String
-    | CardList String
+    | ListList String
     | SelectBoard TrelloBoard
     | LocalStorageGot String
 
@@ -59,10 +59,10 @@ update msg model =
             let
                 updatedBoards = decodeBoards boards
             in
-                ( { model | boards = updatedBoards }, Cmd.batch (map trelloListCards (map (\b -> b.id) updatedBoards)) )
+                ( { model | boards = updatedBoards }, Cmd.batch (map trelloListLists (map (\b -> b.id) updatedBoards)) )
 
-        CardList cards ->
-            ( { model | boards = decodeCards model.boards cards }, Cmd.none )
+        ListList lists ->
+            ( { model | boards = decodeLists model.boards lists }, Cmd.none )
 
         SelectBoard board ->
             ( { model | boards = toogleBoard board model.boards }, Cmd.none )
@@ -81,17 +81,17 @@ subscriptions model =
         [ trelloAuthorizedResponse AuthorizedStatus
         , trelloBoards BoardList
         , localStorageGot LocalStorageGot
-        , trelloCards CardList
+        , trelloList ListList
         ]
 
 
 
 -- VIEW
 
-displayCardSummary : TrelloBoard -> Html Msg
-displayCardSummary board =
-    div [ class "card-summary" ] [
-        text (board.name ++ " " ++ (toString (cardCount board)) ++ " cards") ]
+displayListSummary : TrelloBoard -> Html Msg
+displayListSummary board =
+    div [ class "list-summary" ] [
+        text (board.name ++ " " ++ (toString (listCount board)) ++ " lists") ]
 
 displayBoard : TrelloBoard -> Html Msg
 displayBoard board =
@@ -107,5 +107,5 @@ view model =
             ]
         , div [] (List.map displayBoard model.boards)
         -- TODO: Filter based on show
-        , div [class "board-wrapper"] (List.map displayCardSummary model.boards)
+        , div [class "board-wrapper"] (List.map displayListSummary model.boards)
         ]

@@ -22,6 +22,12 @@ port trelloListLists : String -> Cmd msg
 port trelloList : (String -> msg) -> Sub msg
 
 
+port trelloListCards : String -> Cmd msg
+
+
+port trelloCards : (String -> msg) -> Sub msg
+
+
 port localStorageSet : String -> Cmd msg
 
 

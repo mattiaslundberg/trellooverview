@@ -3,6 +3,7 @@ module TrelloBoard exposing (..)
 import Json.Decode exposing (map2, field, int, string, Decoder, decodeString, list)
 import List exposing (head, tail, filter, map, length, append)
 import TrelloList exposing (..)
+import TrelloCard exposing (..)
 
 
 -- MODEL
@@ -71,3 +72,14 @@ decodeLists boards payload =
         Err message ->
             Debug.log message
                 boards
+
+
+decodeCards : List TrelloBoard -> String -> List TrelloBoard
+decodeCards boards payload =
+    case decodeString (list cardDecoder) payload of
+        Ok cards ->
+            boards
+
+        Err message ->
+            Debug.log message
+            boards

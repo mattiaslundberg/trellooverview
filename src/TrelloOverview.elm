@@ -1,6 +1,7 @@
 module TrelloOverview exposing (..)
 
 import Ports exposing (..)
+import TrelloCard exposing (..)
 import TrelloBoard exposing (..)
 import TrelloList exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
@@ -42,6 +43,7 @@ type Msg
     | AuthorizedStatus Bool
     | BoardList String
     | ListList String
+    | CardList String
     | SelectBoard TrelloBoard
     | LocalStorageGot String
 
@@ -65,6 +67,9 @@ update msg model =
         ListList lists ->
             ( { model | boards = decodeLists model.boards lists }, Cmd.none )
 
+        CardList cards ->
+            ( { model | boards = decodeCards model.boards cards } , Cmd.none )
+
         SelectBoard board ->
             ( { model | boards = toogleBoard board model.boards }, Cmd.none )
 
@@ -83,6 +88,7 @@ subscriptions model =
         , trelloBoards BoardList
         , localStorageGot LocalStorageGot
         , trelloList ListList
+        , trelloCards CardList
         ]
 
 
@@ -92,7 +98,9 @@ subscriptions model =
 
 displayListSummary : TrelloBoard -> Html Msg
 displayListSummary board =
-    div [ class "list-summary" ]
+    div
+        [ class "list-summary"
+        ]
         [ text (board.name ++ " " ++ (toString (listCount board)) ++ " lists")
         ]
 

@@ -7,7 +7,8 @@ import List exposing (head, tail, filter, map, length)
 type alias TrelloList =
     { name : String
     , boardId : String
-}
+    }
+
 
 listDecoder : Decoder TrelloList
 listDecoder =

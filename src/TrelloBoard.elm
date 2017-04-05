@@ -19,7 +19,7 @@ type alias TrelloBoard =
 
 listCount : TrelloBoard -> Int
 listCount board =
-  length board.lists
+    length board.lists
 
 
 toogleVisibilityIfMatch : TrelloBoard -> TrelloBoard -> TrelloBoard
@@ -47,22 +47,27 @@ decodeBoards payload =
             val
 
         Err message ->
-          Debug.log message
-            []
+            Debug.log message
+                []
 
 
-updateLists : (List TrelloList) -> TrelloBoard -> TrelloBoard
+updateLists : List TrelloList -> TrelloBoard -> TrelloBoard
 updateLists lists board =
-  { board | lists = filter (\c -> c.boardId == board.id) (append board.lists
-  lists) }
+    { board
+        | lists =
+            filter (\c -> c.boardId == board.id)
+                (append board.lists
+                    lists
+                )
+    }
 
 
 decodeLists : List TrelloBoard -> String -> List TrelloBoard
 decodeLists boards payload =
     case decodeString (list listDecoder) payload of
-      Ok lists ->
-        map (updateLists lists) boards
+        Ok lists ->
+            map (updateLists lists) boards
 
-      Err message ->
-        Debug.log message
-        boards
+        Err message ->
+            Debug.log message
+                boards

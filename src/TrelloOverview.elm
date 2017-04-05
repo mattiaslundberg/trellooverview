@@ -57,7 +57,8 @@ update msg model =
 
         BoardList boards ->
             let
-                updatedBoards = decodeBoards boards
+                updatedBoards =
+                    decodeBoards boards
             in
                 ( { model | boards = updatedBoards }, Cmd.batch (map trelloListLists (map (\b -> b.id) updatedBoards)) )
 
@@ -88,10 +89,13 @@ subscriptions model =
 
 -- VIEW
 
+
 displayListSummary : TrelloBoard -> Html Msg
 displayListSummary board =
-    div [ class "list-summary" ] [
-        text (board.name ++ " " ++ (toString (listCount board)) ++ " lists") ]
+    div [ class "list-summary" ]
+        [ text (board.name ++ " " ++ (toString (listCount board)) ++ " lists")
+        ]
+
 
 displayBoard : TrelloBoard -> Html Msg
 displayBoard board =
@@ -106,6 +110,6 @@ view model =
             [ text ("authorized: " ++ toString model.isAuthorized)
             ]
         , div [] (List.map displayBoard model.boards)
-        -- TODO: Filter based on show
-        , div [class "board-wrapper"] (List.map displayListSummary model.boards)
+          -- TODO: Filter based on show
+        , div [ class "board-wrapper" ] (List.map displayListSummary model.boards)
         ]

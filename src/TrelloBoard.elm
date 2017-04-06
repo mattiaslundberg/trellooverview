@@ -2,6 +2,7 @@ module TrelloBoard exposing (..)
 
 import Json.Decode exposing (map2, field, int, string, Decoder, decodeString, list)
 import List exposing (head, tail, filter, map, length, append, sum)
+import List.Extra exposing (uniqueBy)
 import TrelloList exposing (..)
 import TrelloCard exposing (..)
 
@@ -63,18 +64,31 @@ decodeBoards payload =
 
 updateLists : List TrelloList -> TrelloBoard -> TrelloBoard
 updateLists lists board =
-    { board
-        | lists =
+    let
+        listsWithDuplicates =
             filter (\c -> c.boardId == board.id)
                 (append board.lists
                     lists
                 )
-    }
+
+        allLists =
+            uniqueBy (\l -> l.id) listsWithDuplicates
+    in
+        { board
+            | lists = allLists
+        }
 
 
 updateCards : List TrelloCard -> TrelloList -> TrelloList
 updateCards cards list =
-    { list | cards = filter (\c -> c.listId == list.id) (append list.cards cards) }
+    let
+        cardsWithDuplicates =
+            filter (\c -> c.listId == list.id) (append list.cards cards)
+
+        allCards =
+            uniqueBy (\c -> c.id) cardsWithDuplicates
+    in
+        { list | cards = allCards }
 
 
 updateListsWithCard : List TrelloCard -> List TrelloList -> List TrelloList

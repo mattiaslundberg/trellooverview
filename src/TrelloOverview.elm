@@ -153,6 +153,8 @@ view model =
             [ text ("authorized: " ++ toString model.isAuthorized)
             ]
         , div [] (List.map displayBoard model.boards)
-          -- TODO: Filter based on show
-        , div [ class "board-wrapper" ] (List.map displayListSummary model.boards)
+        , div [ class "board-wrapper" ]
+            (List.map displayListSummary
+                (List.filter (\b -> b.show) model.boards)
+            )
         ]

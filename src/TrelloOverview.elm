@@ -136,10 +136,8 @@ subscriptions model =
 displayListSummary : TrelloBoard -> Html Msg
 displayListSummary board =
     div
-        [ class "list-summary"
-        ]
-        [ text (board.name ++ " " ++ (toString (listCount board)) ++ " lists")
-        ]
+        [ class "list-summary" ]
+        [ text (board.name ++ " " ++ (toString (listCount board)) ++ " lists and " ++ (toString (cardCount board)) ++ " cards") ]
 
 
 displayBoard : TrelloBoard -> Html Msg

@@ -142,7 +142,7 @@ displayListSummary board =
 
 displayBoard : TrelloBoard -> Html Msg
 displayBoard board =
-    div [ onClick (SelectBoard board) ] [ text (board.name ++ (toString board.show)) ]
+    div [ onClick (SelectBoard board) ] [ text (board.name ++ " " ++ (toString board.show)) ]
 
 
 view : Model -> Html Msg

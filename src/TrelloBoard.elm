@@ -38,7 +38,7 @@ toogleBoard board boards =
 
 boardDecoder : Decoder TrelloBoard
 boardDecoder =
-    map2 (TrelloBoard True []) (field "id" string) (field "name" string)
+    map2 (TrelloBoard False []) (field "id" string) (field "name" string)
 
 
 decodeBoards : String -> List TrelloBoard

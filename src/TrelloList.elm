@@ -1,17 +1,18 @@
 module TrelloList exposing (..)
 
 import TrelloCard exposing (..)
-import Json.Decode exposing (map2, field, int, string, Decoder, decodeString, list)
+import Json.Decode exposing (map3, field, int, string, Decoder, decodeString, list)
 import List exposing (head, tail, filter, map, length)
 
 
 type alias TrelloList =
     { cards: List TrelloCard
         ,name : String
+        , id : String
     , boardId : String
     }
 
 
 listDecoder : Decoder TrelloList
 listDecoder =
-    map2 (TrelloList []) (field "name" string) (field "idBoard" string)
+    map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)

@@ -43,7 +43,7 @@ app.ports.trelloListBoards.subscribe(function() {
 })
 
 app.ports.trelloListLists.subscribe(function(id) {
-    console.log("list lists for board", id)
+   console.log("list lists for board", id)
     Trello.get(
         "/boards/" + id + "/lists",
         {},

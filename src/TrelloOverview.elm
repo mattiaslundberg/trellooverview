@@ -61,17 +61,32 @@ update msg model =
             let
                 updatedBoards =
                     decodeBoards boards
+                boardsToLoad =
+                    map (\b -> b.id) (filter (\b -> b.show) updatedBoards)
             in
-                ( { model | boards = updatedBoards }, Cmd.batch (map trelloListLists (map (\b -> b.id) updatedBoards)) )
+                ( { model | boards = updatedBoards }, Cmd.batch (map
+                trelloListLists boardsToLoad) )
 
         ListList lists ->
-            ( { model | boards = decodeLists model.boards lists }, Cmd.none )
+            let updatedBoards = decodeLists model.boards lists
+                boardsToLoad =
+                    filter (\b -> b.show) updatedBoards
+                listsToLoad = concat (map (\b -> b.lists) boardsToLoad)
+
+            in
+                ( { model | boards = updatedBoards }, Cmd.batch (map
+                trelloListCards ( map (\l -> l.id) listsToLoad)) )
 
         CardList cards ->
             ( { model | boards = decodeCards model.boards cards } , Cmd.none )
 
         SelectBoard board ->
-            ( { model | boards = toogleBoard board model.boards }, Cmd.none )
+            let
+                boards = toogleBoard board model.boards
+                boardsToLoad = map (\b -> b.id) (filter (\b -> b.show) boards)
+            in
+            ( { model | boards = boards }, Cmd.batch (map trelloListLists
+            boardsToLoad ))
 
         LocalStorageGot value ->
             ( model, Cmd.none )

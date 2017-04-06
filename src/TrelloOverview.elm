@@ -61,32 +61,54 @@ update msg model =
             let
                 updatedBoards =
                     decodeBoards boards
+
                 boardsToLoad =
                     map (\b -> b.id) (filter (\b -> b.show) updatedBoards)
             in
-                ( { model | boards = updatedBoards }, Cmd.batch (map
-                trelloListLists boardsToLoad) )
+                ( { model | boards = updatedBoards }
+                , Cmd.batch
+                    (map
+                        trelloListLists
+                        boardsToLoad
+                    )
+                )
 
         ListList lists ->
-            let updatedBoards = decodeLists model.boards lists
+            let
+                updatedBoards =
+                    decodeLists model.boards lists
+
                 boardsToLoad =
                     filter (\b -> b.show) updatedBoards
-                listsToLoad = concat (map (\b -> b.lists) boardsToLoad)
 
+                listsToLoad =
+                    concat (map (\b -> b.lists) boardsToLoad)
             in
-                ( { model | boards = updatedBoards }, Cmd.batch (map
-                trelloListCards ( map (\l -> l.id) listsToLoad)) )
+                ( { model | boards = updatedBoards }
+                , Cmd.batch
+                    (map
+                        trelloListCards
+                        (map (\l -> l.id) listsToLoad)
+                    )
+                )
 
         CardList cards ->
-            ( { model | boards = decodeCards model.boards cards } , Cmd.none )
+            ( { model | boards = decodeCards model.boards cards }, Cmd.none )
 
         SelectBoard board ->
             let
-                boards = toogleBoard board model.boards
-                boardsToLoad = map (\b -> b.id) (filter (\b -> b.show) boards)
+                boards =
+                    toogleBoard board model.boards
+
+                boardsToLoad =
+                    map (\b -> b.id) (filter (\b -> b.show) boards)
             in
-            ( { model | boards = boards }, Cmd.batch (map trelloListLists
-            boardsToLoad ))
+                ( { model | boards = boards }
+                , Cmd.batch
+                    (map trelloListLists
+                        boardsToLoad
+                    )
+                )
 
         LocalStorageGot value ->
             ( model, Cmd.none )

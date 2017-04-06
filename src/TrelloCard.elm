@@ -5,9 +5,9 @@ import List exposing (head, tail, filter, length)
 
 
 type alias TrelloCard =
-    { time: Int
-    , name: String
-}
+    { time : Int
+    , name : String
+    }
 
 
 cardDecoder : Decoder TrelloCard

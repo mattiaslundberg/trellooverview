@@ -82,4 +82,4 @@ decodeCards boards payload =
 
         Err message ->
             Debug.log message
-            boards
+                boards

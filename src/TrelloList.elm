@@ -6,9 +6,9 @@ import List exposing (head, tail, filter, map, length)
 
 
 type alias TrelloList =
-    { cards: List TrelloCard
-        ,name : String
-        , id : String
+    { cards : List TrelloCard
+    , name : String
+    , id : String
     , boardId : String
     }
 

@@ -21,7 +21,7 @@ cardDecoder =
 
 findTimeInString : String -> List (Maybe String)
 findTimeInString s =
-    case List.head (find (AtMost 1) (regex ".* \\((\\d)\\)") s) of
+    case List.head (find (AtMost 1) (regex ".* \\(([\\d\\.\\,]+)\\)") s) of
         Just val ->
             val.submatches
 
@@ -39,16 +39,16 @@ findTime s =
             Nothing
 
 
-getTimeFromCard : TrelloCard -> Int
+getTimeFromCard : TrelloCard -> Float
 getTimeFromCard card =
     case findTime card.name of
         Just val ->
-            case String.toInt val of
+            case String.toFloat val of
                 Ok v ->
                     v
 
                 Err msg ->
-                    0
+                    0.0
 
         Nothing ->
-            0
+            0.0

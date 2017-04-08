@@ -49,7 +49,7 @@ all =
                         board =
                             TrelloBoard True [ TrelloList [ TrelloCard "1" "Some (5)" "1" "2", TrelloCard "" "Other (5)" "" "" ] "123" "132" "123" ] "123" "123"
                     in
-                        Expect.equal 10 (getBoardTimeSummary board)
+                        Expect.equal 10 (getBoardTimeSummary board True True)
             ]
         , describe "Summarize for Lists"
             [ test "Includes done list when flag is set" <|

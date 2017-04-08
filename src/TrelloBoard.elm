@@ -123,10 +123,10 @@ decodeCards boards payload =
                 boards
 
 
-getBoardTimeSummary : TrelloBoard -> Float
-getBoardTimeSummary board =
+getBoardTimeSummary : TrelloBoard -> Bool -> Bool -> Float
+getBoardTimeSummary board includeDone includeNotDone =
     board.lists
-        |> List.map (getTimeFromList True True)
+        |> List.map (getTimeFromList includeDone includeNotDone)
         |> List.sum
 
 
@@ -137,4 +137,22 @@ getBoardsToShow boards =
 
 getBoardTimeSummaryDisplay : TrelloBoard -> String
 getBoardTimeSummaryDisplay board =
-    toString (getBoardTimeSummary board)
+    let
+        timeDone =
+            getBoardTimeSummary board True False
+
+        timeRemaining =
+            getBoardTimeSummary board False True
+
+        percentage =
+            100 * (timeRemaining / (timeDone + timeRemaining))
+    in
+        "Done: "
+            ++ (toString timeDone)
+            ++ " "
+            ++ "Remaining: "
+            ++ (toString timeRemaining)
+            ++ " "
+            ++ "Percentage done: "
+            ++ (toString percentage)
+            ++ "%"

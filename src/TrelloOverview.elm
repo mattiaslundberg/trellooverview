@@ -87,7 +87,7 @@ update msg model =
                 )
 
         ReChange board val ->
-            ( {model | boards = updateBoardsWithProgressRe model.boards board val }, Cmd.none)
+            ( { model | boards = updateBoardsWithProgressRe model.boards board val }, Cmd.none )
 
         LocalStorageGot value ->
             ( model, Cmd.none )
@@ -122,7 +122,7 @@ displayListSummary board =
 displayBoardSelector : TrelloBoard -> Html Msg
 displayBoardSelector board =
     div [ class "board-selector" ]
-        [ div [onClick (SelectBoard board)]
+        [ div [ onClick (SelectBoard board) ]
             [ text (board.name ++ " " ++ (toString board.show))
             ]
         , input [ placeholder "Version.*", onInput (ReChange board) ] []

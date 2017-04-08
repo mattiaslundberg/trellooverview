@@ -1,12 +1,10 @@
 module TrelloBoard exposing (..)
 
-import Json.Decode exposing (map2, field, int, string, Decoder, decodeString, list)
 import List exposing (head, tail, filter, map, length, append, sum)
 import List.Extra exposing (uniqueBy)
 import TrelloList exposing (..)
 import TrelloCard exposing (..)
 import Models exposing (..)
-
 
 
 listCount : TrelloBoard -> Int
@@ -34,22 +32,6 @@ toogleVisibilityIfMatch a b =
 toogleBoard : TrelloBoard -> List TrelloBoard -> List TrelloBoard
 toogleBoard board boards =
     map (toogleVisibilityIfMatch board) boards
-
-
-boardDecoder : Decoder TrelloBoard
-boardDecoder =
-    map2 (TrelloBoard False [] "") (field "id" string) (field "name" string)
-
-
-decodeBoards : String -> List TrelloBoard
-decodeBoards payload =
-    case decodeString (list boardDecoder) payload of
-        Ok val ->
-            val
-
-        Err message ->
-            Debug.log message
-                []
 
 
 updateLists : List TrelloList -> TrelloBoard -> TrelloBoard
@@ -91,34 +73,14 @@ updateBoardWithCard cards board =
     { board | lists = map (updateCards cards) board.lists }
 
 
-decodeLists : List TrelloBoard -> String -> List TrelloBoard
-decodeLists boards payload =
-    case decodeString (list listDecoder) payload of
-        Ok lists ->
-            map (updateLists lists) boards
-
-        Err message ->
-            Debug.log message
-                boards
-
-
-decodeCards : List TrelloBoard -> String -> List TrelloBoard
-decodeCards boards payload =
-    case decodeString (list cardDecoder) payload of
-        Ok cards ->
-            map (updateBoardWithCard cards) boards
-
-        Err message ->
-            Debug.log message
-                boards
-
 updateBoardWithProgressRe : String -> TrelloBoard -> TrelloBoard
 updateBoardWithProgressRe re board =
-    {board | inProgressRe = re }
+    { board | inProgressRe = re }
+
 
 updateBoardsWithProgressRe : List TrelloBoard -> TrelloBoard -> String -> List TrelloBoard
 updateBoardsWithProgressRe boards board re =
-      List.map (updateBoardWithProgressRe re) boards
+    List.map (updateBoardWithProgressRe re) boards
 
 
 getBoardTimeSummary : TrelloBoard -> Bool -> Bool -> Float

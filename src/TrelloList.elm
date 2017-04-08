@@ -7,7 +7,6 @@ import List exposing (head, tail, filter, map, length)
 import Models exposing (..)
 
 
-
 listDecoder : Decoder TrelloList
 listDecoder =
     map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)

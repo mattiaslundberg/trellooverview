@@ -3,7 +3,6 @@ module TrelloOverview exposing (..)
 import Html.Events exposing (onClick, onInput)
 import List exposing (..)
 import Ports exposing (..)
-import TrelloBoard exposing (..)
 import Models exposing (..)
 import Views exposing (view)
 import Html exposing (program)
@@ -93,6 +92,28 @@ update msg model =
         LocalStorageGot value ->
             ( model, Cmd.none )
 
+
+toogleVisibilityIfMatch : TrelloBoard -> TrelloBoard -> TrelloBoard
+toogleVisibilityIfMatch a b =
+    if a.id == b.id then
+        { b | show = not b.show }
+    else
+        b
+
+
+toogleBoard : TrelloBoard -> List TrelloBoard -> List TrelloBoard
+toogleBoard board boards =
+    map (toogleVisibilityIfMatch board) boards
+
+
+updateBoardWithProgressRe : String -> TrelloBoard -> TrelloBoard
+updateBoardWithProgressRe re board =
+    { board | inProgressRe = re }
+
+
+updateBoardsWithProgressRe : List TrelloBoard -> TrelloBoard -> String -> List TrelloBoard
+updateBoardsWithProgressRe boards board re =
+    List.map (updateBoardWithProgressRe re) boards
 
 
 -- SUBSCRIPTIONS

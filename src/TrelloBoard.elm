@@ -153,6 +153,6 @@ getBoardTimeSummaryDisplay board =
             ++ "Remaining: "
             ++ (toString timeRemaining)
             ++ " "
-            ++ "Percentage done: "
+            ++ "Percentage remaining: "
             ++ (toString percentage)
             ++ "%"

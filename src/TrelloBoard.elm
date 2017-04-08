@@ -125,7 +125,9 @@ decodeCards boards payload =
 
 getBoardTimeSummary : TrelloBoard -> Float
 getBoardTimeSummary board =
-    List.sum (List.map getTimeFromList board.lists)
+    board.lists
+        |> List.map (getTimeFromList True True)
+        |> List.sum
 
 
 getBoardsToShow : List TrelloBoard -> List TrelloBoard

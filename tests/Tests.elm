@@ -51,4 +51,34 @@ all =
                     in
                         Expect.equal 10 (getBoardTimeSummary board)
             ]
+        , describe "Summarize for Lists"
+            [ test "Includes done list when flag is set" <|
+                \() ->
+                    let
+                        list =
+                            TrelloList [ TrelloCard "1" "Some (1)" "1" "2" ] "Done" "123" "123"
+                    in
+                        Expect.equal 1 (getTimeFromList True False list)
+            , test "Excludes done list when flag is not set" <|
+                \() ->
+                    let
+                        list =
+                            TrelloList [ TrelloCard "1" "Some (1)" "1" "2" ] "Done" "123" "123"
+                    in
+                        Expect.equal 0 (getTimeFromList False False list)
+            , test "Includes notdone list when flag is set" <|
+                \() ->
+                    let
+                        list =
+                            TrelloList [ TrelloCard "1" "Some (1)" "1" "2" ] "Something" "123" "123"
+                    in
+                        Expect.equal 1 (getTimeFromList False True list)
+            , test "Excludes notdone list when flag is not set" <|
+                \() ->
+                    let
+                        list =
+                            TrelloList [ TrelloCard "1" "Some (1)" "1" "2" ] "Something" "123" "123"
+                    in
+                        Expect.equal 0 (getTimeFromList False False list)
+            ]
         ]

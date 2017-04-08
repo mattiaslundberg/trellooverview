@@ -16,3 +16,8 @@ type alias TrelloList =
 listDecoder : Decoder TrelloList
 listDecoder =
     map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)
+
+
+getTimeFromList : TrelloList -> Float
+getTimeFromList list =
+    List.sum (List.map getTimeFromCard list.cards)

@@ -140,6 +140,10 @@ displayBoard board =
     div [ onClick (SelectBoard board) ] [ text (board.name ++ " " ++ (toString board.show)) ]
 
 
+displayTimeSummary : TrelloBoard -> Html Msg
+displayTimeSummary board =
+    div [] [ text (board.name ++ " " ++ (getBoardTimeSummary board))]
+
 view : Model -> Html Msg
 view model =
     div
@@ -152,4 +156,6 @@ view model =
             (List.map displayListSummary
                 (List.filter (\b -> b.show) model.boards)
             )
+        , div [ class "summary-wrapper" ]
+            (List.map displayTimeSummary model.boards)
         ]

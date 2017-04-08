@@ -5,13 +5,15 @@ import Test exposing (..)
 import Expect
 import String
 import TrelloCard exposing (..)
+import TrelloList exposing (..)
+import TrelloBoard exposing (..)
 
 
 all : Test
 all =
     describe "TrelloCard"
         [ describe "Get estimation from trelloCard name"
-            [ test "" <|
+            [ test "Get time from single number" <|
                 \() ->
                     let
                         card =
@@ -39,5 +41,14 @@ all =
                             TrelloCard "123" "Some (34)" "123" "123"
                     in
                         Expect.equal 34 (getTimeFromCard card)
+            ]
+        , describe "Summarize for boards"
+            [ test "Summarize for simple board" <|
+                \() ->
+                    let
+                        board =
+                            TrelloBoard True [ TrelloList [ TrelloCard "1" "Some (5)" "1" "2", TrelloCard "" "Other (5)" "" "" ] "123" "132" "123" ] "123" "123"
+                    in
+                        Expect.equal ("total points " ++ (toString 10)) (getBoardTimeSummary board)
             ]
         ]

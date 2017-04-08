@@ -121,3 +121,12 @@ decodeCards boards payload =
         Err message ->
             Debug.log message
                 boards
+
+
+getBoardTimeSummary : TrelloBoard -> String
+getBoardTimeSummary board =
+    "total points " ++ (toString (List.sum (List.map getTimeFromList board.lists)))
+    -- count = 0
+    -- for list in board.lists
+    --     for card in list.cards
+    --         count += getTimeFromCard card

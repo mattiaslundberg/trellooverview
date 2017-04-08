@@ -141,11 +141,11 @@ displayListSummary board =
 
 displayBoardSelector : TrelloBoard -> Html Msg
 displayBoardSelector board =
-    div [ onClick (SelectBoard board), class "board-selector" ]
-        [ div []
+    div [ class "board-selector" ]
+        [ div [onClick (SelectBoard board)]
             [ text (board.name ++ " " ++ (toString board.show))
             ]
-        , input [ placeholder "Done.*", onInput (ReChange board) ] []
+        , input [ placeholder "Version.*", onInput (ReChange board) ] []
         ]
 
 

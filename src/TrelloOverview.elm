@@ -142,7 +142,8 @@ displayBoard board =
 
 displayTimeSummary : TrelloBoard -> Html Msg
 displayTimeSummary board =
-    div [] [ text (board.name ++ " " ++ (getBoardTimeSummary board))]
+    div [] [ text (board.name ++ " " ++ (getBoardTimeSummary board)) ]
+
 
 view : Model -> Html Msg
 view model =

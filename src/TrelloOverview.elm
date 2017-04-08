@@ -145,6 +145,11 @@ displayTimeSummary board =
     div [] [ text (board.name ++ " " ++ (getBoardTimeSummary board)) ]
 
 
+getBoardsToShow : List TrelloBoard -> List TrelloBoard
+getBoardsToShow boards =
+    List.filter .show boards
+
+
 view : Model -> Html Msg
 view model =
     div
@@ -154,9 +159,8 @@ view model =
             ]
         , div [] (List.map displayBoard model.boards)
         , div [ class "board-wrapper" ]
-            (List.map displayListSummary
-                (List.filter (\b -> b.show) model.boards)
+            (List.map displayListSummary (getBoardsToShow model.boards)
             )
         , div [ class "summary-wrapper" ]
-            (List.map displayTimeSummary model.boards)
+            (List.map displayTimeSummary (getBoardsToShow model.boards))
         ]

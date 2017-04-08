@@ -135,32 +135,29 @@ displayListSummary board =
         [ text (board.name ++ " " ++ (toString (listCount board)) ++ " lists and " ++ (toString (cardCount board)) ++ " cards") ]
 
 
-displayBoard : TrelloBoard -> Html Msg
-displayBoard board =
-    div [ onClick (SelectBoard board) ] [ text (board.name ++ " " ++ (toString board.show)) ]
+displayBoardSelector : TrelloBoard -> Html Msg
+displayBoardSelector board =
+    div [ onClick (SelectBoard board), class "board-selector" ] [ text (board.name ++ " " ++ (toString board.show)) ]
 
 
 displayTimeSummary : TrelloBoard -> Html Msg
 displayTimeSummary board =
-    div [] [ text (board.name ++ " " ++ (getBoardTimeSummary board)) ]
-
-
-getBoardsToShow : List TrelloBoard -> List TrelloBoard
-getBoardsToShow boards =
-    List.filter .show boards
+    div [ class "board-timing" ]
+        [ text (board.name ++ " " ++ (getBoardTimeSummaryDisplay board))
+        ]
 
 
 view : Model -> Html Msg
 view model =
-    div
-        [ class "wrapper" ]
-        [ div []
-            [ text ("authorized: " ++ toString model.isAuthorized)
+    let
+        boards =
+            getBoardsToShow model.boards
+    in
+        div
+            [ class "wrapper" ]
+            [ div [] (List.map displayBoardSelector model.boards)
+            , div [ class "board-wrapper" ]
+                (List.map displayListSummary boards)
+            , div [ class "summary-wrapper" ]
+                (List.map displayTimeSummary boards)
             ]
-        , div [] (List.map displayBoard model.boards)
-        , div [ class "board-wrapper" ]
-            (List.map displayListSummary (getBoardsToShow model.boards)
-            )
-        , div [ class "summary-wrapper" ]
-            (List.map displayTimeSummary (getBoardsToShow model.boards))
-        ]

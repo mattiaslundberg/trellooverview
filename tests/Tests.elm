@@ -49,6 +49,6 @@ all =
                         board =
                             TrelloBoard True [ TrelloList [ TrelloCard "1" "Some (5)" "1" "2", TrelloCard "" "Other (5)" "" "" ] "123" "132" "123" ] "123" "123"
                     in
-                        Expect.equal ("total points " ++ (toString 10)) (getBoardTimeSummary board)
+                        Expect.equal 10 (getBoardTimeSummary board)
             ]
         ]

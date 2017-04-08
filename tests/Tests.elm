@@ -1,10 +1,9 @@
 module Tests exposing (..)
 
 import Array
-import Test exposing (..)
 import Expect
 import String
-import TrelloBoard exposing (..)
+import Test exposing (..)
 import Models exposing (..)
 import Views exposing (..)
 

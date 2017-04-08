@@ -29,3 +29,13 @@ getTimeFromCard card =
 
         Nothing ->
             0.0
+
+
+findTimeInString : String -> List (Maybe String)
+findTimeInString s =
+    case List.head (find (AtMost 1) (regex ".* \\(([\\d\\.\\,]+)\\)") s) of
+        Just val ->
+            val.submatches
+
+        Nothing ->
+            []

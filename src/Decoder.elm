@@ -44,13 +44,3 @@ decodeCards boards payload =
 cardDecoder : Decoder TrelloCard
 cardDecoder =
     map4 TrelloCard (field "id" string) (field "name" string) (field "idList" string) (field "idBoard" string)
-
-
-findTimeInString : String -> List (Maybe String)
-findTimeInString s =
-    case List.head (find (AtMost 1) (regex ".* \\(([\\d\\.\\,]+)\\)") s) of
-        Just val ->
-            val.submatches
-
-        Nothing ->
-            []

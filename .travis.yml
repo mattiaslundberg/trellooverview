@@ -6,7 +6,7 @@ node_js:
 cache:
   yarn: true
   directories:
-    - test/elm-stuff/build-artifacts
+    - test/elm-stuff
     - elm-stuff
     - node_modules
 

@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "elm": "^0.18.0",
-    "elm-format": "^0.5.2",
+    "elm-format": "^0.6.1-alpha",
     "elm-oracle": "^1.1.1",
     "elm-test": "^0.18.2"
   }

@@ -1,16 +1,11 @@
 module TrelloOverview exposing (..)
 
-import Ports exposing (..)
-import TrelloCard exposing (..)
-import TrelloBoard exposing (..)
-import TrelloList exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td)
-import Html.Events exposing (onClick)
 import Html.Attributes exposing (style, class, classList)
+import Html.Events exposing (onClick)
 import List exposing (..)
-import Tuple
-import Task
-import Time
+import Ports exposing (..)
+import TrelloBoard exposing (..)
 
 
 main : Program Never Model Msg

@@ -4,14 +4,8 @@ import Json.Decode exposing (map4, field, int, string, Decoder, decodeString, li
 import List exposing (head, tail, filter, length)
 import Regex exposing (..)
 import String
+import Models exposing (..)
 
-
-type alias TrelloCard =
-    { id : String
-    , name : String
-    , listId : String
-    , boardId : String
-    }
 
 
 cardDecoder : Decoder TrelloCard

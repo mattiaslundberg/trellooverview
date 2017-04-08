@@ -7,6 +7,7 @@ import String
 import TrelloCard exposing (..)
 import TrelloList exposing (..)
 import TrelloBoard exposing (..)
+import Models exposing (..)
 
 
 all : Test

@@ -6,6 +6,7 @@ import Html.Events exposing (onClick, onInput)
 import List exposing (..)
 import Ports exposing (..)
 import TrelloBoard exposing (..)
+import Models exposing (..)
 
 
 main : Program Never Model Msg
@@ -21,27 +22,6 @@ main =
 init : ( Model, Cmd Msg )
 init =
     Model False [] ! [ trelloAuthorize "" ]
-
-
-
--- MODEL
-
-
-type alias Model =
-    { isAuthorized : Bool
-    , boards : List TrelloBoard
-    }
-
-
-type Msg
-    = IsAuhorized
-    | AuthorizedStatus Bool
-    | BoardList String
-    | ListList String
-    | CardList String
-    | SelectBoard TrelloBoard
-    | LocalStorageGot String
-    | ReChange TrelloBoard String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

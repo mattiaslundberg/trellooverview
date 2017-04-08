@@ -4,14 +4,8 @@ import Regex exposing (..)
 import TrelloCard exposing (..)
 import Json.Decode exposing (map3, field, int, string, Decoder, decodeString, list)
 import List exposing (head, tail, filter, map, length)
+import Models exposing (..)
 
-
-type alias TrelloList =
-    { cards : List TrelloCard
-    , name : String
-    , id : String
-    , boardId : String
-    }
 
 
 listDecoder : Decoder TrelloList

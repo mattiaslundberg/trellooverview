@@ -5,19 +5,8 @@ import List exposing (head, tail, filter, map, length, append, sum)
 import List.Extra exposing (uniqueBy)
 import TrelloList exposing (..)
 import TrelloCard exposing (..)
+import Models exposing (..)
 
-
--- MODEL
-
-
-type alias TrelloBoard =
-    { show : Bool
-    , lists : List TrelloList
-    , inProgressRe : String
-    , id : String
-    , name :
-        String
-    }
 
 
 listCount : TrelloBoard -> Int

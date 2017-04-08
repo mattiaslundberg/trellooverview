@@ -4,10 +4,9 @@ import Array
 import Test exposing (..)
 import Expect
 import String
-import TrelloCard exposing (..)
-import TrelloList exposing (..)
 import TrelloBoard exposing (..)
 import Models exposing (..)
+import Views exposing (..)
 
 
 all : Test

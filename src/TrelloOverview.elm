@@ -1,12 +1,13 @@
 module TrelloOverview exposing (..)
 
-import Html exposing (Html, button, div, text, span, program, table, tr, td, input)
-import Html.Attributes exposing (style, class, classList, placeholder)
 import Html.Events exposing (onClick, onInput)
 import List exposing (..)
 import Ports exposing (..)
 import TrelloBoard exposing (..)
 import Models exposing (..)
+import Views exposing (view)
+import Html exposing (program)
+import Decoder exposing (..)
 
 
 main : Program Never Model Msg
@@ -106,47 +107,3 @@ subscriptions model =
         , trelloList ListList
         , trelloCards CardList
         ]
-
-
-
--- VIEW
-
-
-displayListSummary : TrelloBoard -> Html Msg
-displayListSummary board =
-    div
-        [ class "list-summary" ]
-        [ text (board.name ++ " " ++ (toString (listCount board)) ++ " lists and " ++ (toString (cardCount board)) ++ " cards") ]
-
-
-displayBoardSelector : TrelloBoard -> Html Msg
-displayBoardSelector board =
-    div [ class "board-selector" ]
-        [ div [ onClick (SelectBoard board) ]
-            [ text (board.name ++ " " ++ (toString board.show))
-            ]
-        , input [ placeholder "Version.*", onInput (ReChange board) ] []
-        ]
-
-
-displayTimeSummary : TrelloBoard -> Html Msg
-displayTimeSummary board =
-    div [ class "board-timing" ]
-        [ text (board.name ++ " " ++ (getBoardTimeSummaryDisplay board))
-        ]
-
-
-view : Model -> Html Msg
-view model =
-    let
-        boards =
-            getBoardsToShow model.boards
-    in
-        div
-            [ class "wrapper" ]
-            [ div [] (List.map displayBoardSelector model.boards)
-            , div [ class "board-wrapper" ]
-                (List.map displayListSummary boards)
-            , div [ class "summary-wrapper" ]
-                (List.map displayTimeSummary boards)
-            ]

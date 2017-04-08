@@ -145,7 +145,7 @@ getBoardTimeSummaryDisplay board =
             getBoardTimeSummary board False True
 
         percentage =
-            100 * (timeRemaining / (timeDone + timeRemaining))
+            round (100 * (timeRemaining / (timeDone + timeRemaining)))
     in
         "Done: "
             ++ (toString timeDone)

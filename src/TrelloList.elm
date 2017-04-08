@@ -43,17 +43,9 @@ listIsDone list =
     listMatches list doneRe
 
 
-
--- This should be a user-configurable expression
-
-remainingRe : String
-remainingRe =
-    "Version .*"
-
-
-listIsRemaining : String -> Bool
-listIsRemaining list =
-    listMatches list remainingRe
+listIsRemaining : String -> String -> Bool
+listIsRemaining inProgressRe list =
+    listMatches list inProgressRe
 
 
 summarizeCards : List TrelloCard -> Float
@@ -63,8 +55,8 @@ summarizeCards cards =
         |> List.sum
 
 
-getTimeFromList : Bool -> Bool -> TrelloList -> Float
-getTimeFromList includeDone includeNotDone list =
+getTimeFromList : String -> Bool -> Bool -> TrelloList -> Float
+getTimeFromList inProgressRe includeDone includeNotDone list =
     let
         doneCount =
             if includeDone && (listIsDone list.name) then
@@ -73,7 +65,7 @@ getTimeFromList includeDone includeNotDone list =
                 0
 
         remainingCount =
-            if includeNotDone && (listIsRemaining list.name) then
+            if includeNotDone && (listIsRemaining inProgressRe list.name) then
                 (summarizeCards list.cards)
             else
                 0

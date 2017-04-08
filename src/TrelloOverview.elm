@@ -1,8 +1,8 @@
 module TrelloOverview exposing (..)
 
-import Html exposing (Html, button, div, text, span, program, table, tr, td)
-import Html.Attributes exposing (style, class, classList)
-import Html.Events exposing (onClick)
+import Html exposing (Html, button, div, text, span, program, table, tr, td, input)
+import Html.Attributes exposing (style, class, classList, placeholder)
+import Html.Events exposing (onClick, onInput)
 import List exposing (..)
 import Ports exposing (..)
 import TrelloBoard exposing (..)
@@ -41,6 +41,7 @@ type Msg
     | CardList String
     | SelectBoard TrelloBoard
     | LocalStorageGot String
+    | ReChange TrelloBoard String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -105,6 +106,9 @@ update msg model =
                     )
                 )
 
+        ReChange board val ->
+            ( {model | boards = updateBoardsWithProgressRe model.boards board val }, Cmd.none)
+
         LocalStorageGot value ->
             ( model, Cmd.none )
 
@@ -137,7 +141,12 @@ displayListSummary board =
 
 displayBoardSelector : TrelloBoard -> Html Msg
 displayBoardSelector board =
-    div [ onClick (SelectBoard board), class "board-selector" ] [ text (board.name ++ " " ++ (toString board.show)) ]
+    div [ onClick (SelectBoard board), class "board-selector" ]
+        [ div []
+            [ text (board.name ++ " " ++ (toString board.show))
+            ]
+        , input [ placeholder "Done.*", onInput (ReChange board) ] []
+        ]
 
 
 displayTimeSummary : TrelloBoard -> Html Msg

@@ -13,6 +13,7 @@ import TrelloCard exposing (..)
 type alias TrelloBoard =
     { show : Bool
     , lists : List TrelloList
+    , inProgressRe : String
     , id : String
     , name :
         String
@@ -48,7 +49,7 @@ toogleBoard board boards =
 
 boardDecoder : Decoder TrelloBoard
 boardDecoder =
-    map2 (TrelloBoard False []) (field "id" string) (field "name" string)
+    map2 (TrelloBoard False [] "") (field "id" string) (field "name" string)
 
 
 decodeBoards : String -> List TrelloBoard
@@ -122,11 +123,19 @@ decodeCards boards payload =
             Debug.log message
                 boards
 
+updateBoardWithProgressRe : String -> TrelloBoard -> TrelloBoard
+updateBoardWithProgressRe re board =
+    {board | inProgressRe = re }
+
+updateBoardsWithProgressRe : List TrelloBoard -> TrelloBoard -> String -> List TrelloBoard
+updateBoardsWithProgressRe boards board re =
+      List.map (updateBoardWithProgressRe re) boards
+
 
 getBoardTimeSummary : TrelloBoard -> Bool -> Bool -> Float
 getBoardTimeSummary board includeDone includeNotDone =
     board.lists
-        |> List.map (getTimeFromList includeDone includeNotDone)
+        |> List.map (getTimeFromList board.inProgressRe includeDone includeNotDone)
         |> List.sum
 
 

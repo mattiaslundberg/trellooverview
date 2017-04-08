@@ -1,6 +1,8 @@
 sudo: false
+language: node
 
 cache:
+  yarn: true
   directories:
     - test/elm-stuff/build-artifacts
     - elm-stuff

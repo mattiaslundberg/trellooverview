@@ -267,6 +267,10 @@ elm-format@^0.5.2:
   dependencies:
     binstall "1.2.0"
 
+elm-oracle@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/elm-oracle/-/elm-oracle-1.1.1.tgz#61f6d783221b4ad08e7d101d678b9d5a67d3961c"
+
 elm-test@^0.18.2:
   version "0.18.2"
   resolved "https://registry.yarnpkg.com/elm-test/-/elm-test-0.18.2.tgz#1e94bd292de42a4960c6fdbe64eacee30669040a"
@@ -931,7 +935,7 @@ rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-"readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.0.2, readable-stream@^2.1.4:
+"readable-stream@^2.0.0 || ^1.1.13", readable-stream@^2.1.4:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.2.6.tgz#8b43aed76e71483938d12a8d46c6cf1a00b1f816"
   dependencies:
@@ -943,7 +947,7 @@ rc@^1.1.7:
     string_decoder "~0.10.x"
     util-deprecate "~1.0.1"
 
-readable-stream@~2.0.5:
+readable-stream@^2.0.2, readable-stream@~2.0.5:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.0.6.tgz#8f90341e68a53ccc928788dacfcd11b36eb9b78e"
   dependencies:

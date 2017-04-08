@@ -34,6 +34,13 @@ all =
                             TrelloCard "123" "Some (3.4)" "123" "123"
                     in
                         Expect.equal 3.4 (getTimeFromCard card)
+            , test "Get time after other parantesis" <|
+                \() ->
+                    let
+                        card =
+                            TrelloCard "123" "Some (other) (3)" "123" "123"
+                    in
+                        Expect.equal 3 (getTimeFromCard card)
             , test "Get time larger than 10" <|
                 \() ->
                     let

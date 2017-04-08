@@ -19,14 +19,41 @@ listDecoder =
     map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)
 
 
-listIsDone : String -> Bool
-listIsDone list =
-    case List.head (find (AtMost 1) (regex ".*Done.*") list) of
+listMatches : String -> String -> Bool
+listMatches list re =
+    case List.head (find (AtMost 1) (regex re) list) of
         Just val ->
             True
 
         Nothing ->
             False
+
+
+
+-- This should be a user-configurable expression
+
+
+doneRe : String
+doneRe =
+    "Done.*"
+
+
+listIsDone : String -> Bool
+listIsDone list =
+    listMatches list doneRe
+
+
+
+-- This should be a user-configurable expression
+
+remainingRe : String
+remainingRe =
+    "Version .*"
+
+
+listIsRemaining : String -> Bool
+listIsRemaining list =
+    listMatches list remainingRe
 
 
 summarizeCards : List TrelloCard -> Float
@@ -38,15 +65,17 @@ summarizeCards cards =
 
 getTimeFromList : Bool -> Bool -> TrelloList -> Float
 getTimeFromList includeDone includeNotDone list =
-    case listIsDone list.name of
-        True ->
-            if includeDone then
-                summarizeCards list.cards
+    let
+        doneCount =
+            if includeDone && (listIsDone list.name) then
+                (summarizeCards list.cards)
             else
                 0
 
-        False ->
-            if includeNotDone then
-                summarizeCards list.cards
+        remainingCount =
+            if includeNotDone && (listIsRemaining list.name) then
+                (summarizeCards list.cards)
             else
                 0
+    in
+        doneCount + remainingCount

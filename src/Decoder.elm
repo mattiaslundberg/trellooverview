@@ -72,15 +72,15 @@ updateBoardWithCard cards board =
     { board | lists = List.map (updateCards cards) board.lists }
 
 
-decodeCards : List TrelloBoard -> String -> List TrelloBoard
-decodeCards boards payload =
+decodeCards : String -> List TrelloCard
+decodeCards payload =
     case decodeString (list cardDecoder) payload of
         Ok cards ->
-            List.map (updateBoardWithCard cards) boards
+            cards
 
         Err message ->
             Debug.log message
-                boards
+                []
 
 
 cardDecoder : Decoder TrelloCard

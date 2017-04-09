@@ -36,15 +36,13 @@ all =
                     Expect.equal
                         [ TrelloList [] "somename" "someid" "board" ]
                         (decodeLists json)
-
-        -- This is the expected interface, fix decodeCards to match it
-        -- , test "Get Card list" <|
-        --     \() ->
-        --         let
-        --             json =
-        --                 "[{\"id\": \"id\", \"name\": \"name\", \"idList\": \"list\", \"idBoard\": \"board\"}]"
-        --         in
-        --             Expect.equal
-        --                 [ TrelloCard "id" "name" "list" "board" ]
-        --                 (decodeCards json)
+        , test "Get Card list" <|
+            \() ->
+                let
+                    json =
+                        "[{\"id\": \"id\", \"name\": \"name\", \"idList\": \"list\", \"idBoard\": \"board\"}]"
+                in
+                    Expect.equal
+                        [ TrelloCard "id" "name" "list" "board" ]
+                        (decodeCards json)
         ]

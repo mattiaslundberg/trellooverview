@@ -1,4 +1,32 @@
+body {
+    margin: 0;
+}
+.wrapper {
+    background-color: #dddddd;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    margin: 0;
+    padding: 10px;
+}
 
 .board-wrapper {
   margin: 5px;
+}
+
+.summary-wrapper {
+}
+
+.settings-wrapper {
+    width: 40%;
+    background-color: #cccccc;
+    border: 1px solid black;
+}
+
+.settings-wrapper .board-selector {
+    margin: 10px 5px;
+
+}
+
+.settings-wrapper .board-selector input {
+    margin-left: 5px;
 }

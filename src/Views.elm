@@ -123,7 +123,7 @@ displayBoardSelector board =
     div [ class "board-selector" ]
         [ input [ type_ "checkbox", onClick (SelectBoard board) ] []
         , span [] [ text board.name ]
-         if board.show then
+        , if board.show then
             input [ placeholder "Version.*", onInput (ReChange board) ] []
           else
             span [] []
@@ -175,7 +175,7 @@ displaySettingButton =
 displaySettings : Model -> Html Msg
 displaySettings model =
     if model.showSettings then
-        div [] (List.map displayBoardSelector model.boards)
+        div [ class "settings-wrapper" ] (List.map displayBoardSelector model.boards)
     else
         div [] []
 
@@ -190,8 +190,9 @@ view model =
             [ class "wrapper" ]
             [ displaySettingButton
             , (displaySettings model)
-            , div [ class "board-wrapper" ]
-                (List.map displayListSummary boards)
+
+            -- , div [ class "board-wrapper" ]
+            --     (List.map displayListSummary boards)
             , div [ class "summary-wrapper" ]
                 (List.map displayTimeSummary boards)
             ]

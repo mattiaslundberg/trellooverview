@@ -111,13 +111,6 @@ getTimeFromList inProgressRe includeDone includeNotDone list =
         doneCount + remainingCount
 
 
-displayListSummary : TrelloBoard -> Html Msg
-displayListSummary board =
-    div
-        [ class "list-summary" ]
-        [ text (board.name ++ " " ++ (toString (length board.lists)) ++ " lists and " ++ (toString (cardCount board)) ++ " cards") ]
-
-
 displayBoardSelector : TrelloBoard -> Html Msg
 displayBoardSelector board =
     div [ class "board-selector" ]
@@ -190,9 +183,6 @@ view model =
             [ class "wrapper" ]
             [ displaySettingButton
             , (displaySettings model)
-
-            -- , div [ class "board-wrapper" ]
-            --     (List.map displayListSummary boards)
             , div [ class "summary-wrapper" ]
                 (List.map displayTimeSummary boards)
             ]

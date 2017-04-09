@@ -1,4 +1,4 @@
-module TrelloOverview exposing (..)
+module Main exposing (..)
 
 import Html.Events exposing (onClick, onInput)
 import List exposing (..)

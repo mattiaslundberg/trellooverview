@@ -40,20 +40,8 @@ update msg model =
             let
                 updatedBoards =
                     decodeLists model.boards lists
-
-                boardsToLoad =
-                    filter (\b -> b.show) updatedBoards
-
-                listsToLoad =
-                    concat (map (\b -> b.lists) boardsToLoad)
             in
-                ( { model | boards = updatedBoards }
-                , Cmd.batch
-                    (map
-                        trelloListCards
-                        (map (\l -> l.id) listsToLoad)
-                    )
-                )
+                ( { model | boards = updatedBoards }, getListUpdateCommands updatedBoards )
 
         CardList cards ->
             ( { model | boards = decodeCards model.boards cards }, Cmd.none )
@@ -63,14 +51,14 @@ update msg model =
                 updatedBoards =
                     decodeBoards boards
             in
-                ( { model | boards = updatedBoards }, getSelectionCommands updatedBoards )
+                ( { model | boards = updatedBoards }, getBoardUpdateCommands updatedBoards )
 
         SelectBoard board ->
             let
                 boards =
                     toogleBoard board model.boards
             in
-                ( { model | boards = boards }, getSelectionCommands boards )
+                ( { model | boards = boards }, getBoardUpdateCommands boards )
 
         ReChange board val ->
             ( { model | boards = updateBoardsWithProgressRe model.boards board val }, localStorageSet (LocalStorage ("progress-" ++ board.id) (val)) )
@@ -84,8 +72,19 @@ update msg model =
                     ( model, Cmd.none )
 
 
-getSelectionCommands : List TrelloBoard -> Cmd msg
-getSelectionCommands boards =
+getListUpdateCommands : List TrelloBoard -> Cmd msg
+getListUpdateCommands boards =
+    boards
+        |> filter .show
+        |> map .lists
+        |> concat
+        |> map .id
+        |> map trelloListCards
+        |> Cmd.batch
+
+
+getBoardUpdateCommands : List TrelloBoard -> Cmd msg
+getBoardUpdateCommands boards =
     let
         boardIds : List String
         boardIds =

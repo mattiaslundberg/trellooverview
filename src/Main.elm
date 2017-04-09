@@ -41,11 +41,8 @@ update msg model =
             let
                 updatedLists =
                     decodeLists lists
-
-                updatedBoards =
-                    List.map (updateLists updatedLists) model.boards
             in
-                ( { model | boards = updatedBoards }, getListUpdateCommands updatedLists )
+                ( { model | boards = List.map (updateLists updatedLists) model.boards }, getListUpdateCommands updatedLists )
 
         CardList cards ->
             ( { model | boards = decodeCards model.boards cards }, Cmd.none )

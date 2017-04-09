@@ -1,6 +1,8 @@
 body {
     margin: 0;
+    font-family: Helvetica;
 }
+
 .wrapper {
     background-color: #dddddd;
     width: calc(100% - 20px);
@@ -10,8 +12,29 @@ body {
 }
 
 .board-wrapper {
-  margin: 5px;
+    margin: 5px;
 }
+
+.board-timing {
+    float: left;
+    margin: 10px 10px 0 0;
+    background-color: #eeeeee;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.board-timing .title {
+    font-size: 2em;
+}
+
+.board-timing .percentage {
+    font-size: 5em;
+}
+
+.board-timing .text {
+    font-size: 1.3em;
+}
+
 
 .summary-wrapper {
 }

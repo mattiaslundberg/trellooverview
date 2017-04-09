@@ -9,8 +9,7 @@ type alias Model =
 
 
 type Msg
-    = IsAuhorized
-    | ToggleSettings
+    = ToggleSettings
     | AuthorizedStatus Bool
     | BoardList String
     | ListList String

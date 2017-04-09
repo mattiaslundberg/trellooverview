@@ -1,5 +1,7 @@
 port module Ports exposing (..)
 
+import Models exposing (LocalStorage)
+
 
 port trelloAuthorized : String -> Cmd msg
 
@@ -28,10 +30,10 @@ port trelloListCards : String -> Cmd msg
 port trelloCards : (String -> msg) -> Sub msg
 
 
-port localStorageSet : String -> Cmd msg
+port localStorageSet : LocalStorage -> Cmd msg
 
 
 port localStorageGet : String -> Cmd msg
 
 
-port localStorageGot : (String -> msg) -> Sub msg
+port localStorageGot : (LocalStorage -> msg) -> Sub msg

@@ -72,11 +72,12 @@ app.ports.trelloListCards.subscribe(function(id) {
 
 
 // Connect localStorage to application
-app.ports.localStorageSet.subscribe(function(key, value) {
-    localStorage.set(key, value)
+app.ports.localStorageSet.subscribe(function(ls) {
+    localStorage.setItem(ls.key, ls.value)
 })
 
 app.ports.localStorageGet.subscribe(function(key) {
-    var value = localStorage.get(key)
-    app.ports.localStorageGot.send(JSON.stringify([key, value]))
+    console.log("get for key", key)
+    var value = localStorage.getItem(key)
+    app.ports.localStorageGot.send({key: key, value: value})
 })

@@ -16,8 +16,12 @@ type Msg
     | ListList String
     | CardList String
     | SelectBoard TrelloBoard
-    | LocalStorageGot String
+    | LocalStorageGot LocalStorage
     | ReChange TrelloBoard String
+
+
+type alias LocalStorage =
+    { key : String, value : String }
 
 
 type alias TrelloBoard =

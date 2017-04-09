@@ -46,9 +46,11 @@ update msg model =
             in
                 ( { model | boards = updatedBoards }
                 , Cmd.batch
-                    (map
+                    ((map
                         trelloListLists
                         boardsToLoad
+                     )
+                        ++ (map (\board -> localStorageGet ("progress-" ++ board)) boardsToLoad)
                     )
                 )
 
@@ -84,16 +86,53 @@ update msg model =
             in
                 ( { model | boards = boards }
                 , Cmd.batch
-                    (map trelloListLists
+                    ((map trelloListLists
                         boardsToLoad
+                     )
+                        ++ (map (\board -> localStorageGet ("progress-" ++ board)) boardsToLoad)
                     )
                 )
 
         ReChange board val ->
-            ( { model | boards = updateBoardsWithProgressRe model.boards board val }, Cmd.none )
+            ( { model | boards = updateBoardsWithProgressRe model.boards board val }, localStorageSet (LocalStorage ("progress-" ++ board.id) (val)) )
 
-        LocalStorageGot value ->
-            ( model, Cmd.none )
+        LocalStorageGot ls ->
+            case getBoardByStorageKey model.boards ls.key of
+                Just board ->
+                    ( { model | boards = updateBoardsWithProgressRe model.boards board ls.value }, Cmd.none )
+
+                Nothing ->
+                    ( model, Cmd.none )
+
+
+getBoardByStorageKey : List TrelloBoard -> String -> Maybe TrelloBoard
+getBoardByStorageKey boards key =
+    let
+        id =
+            getBoardIdByStorageKey key
+    in
+        case id of
+            Just i ->
+                List.head (List.filter (\b -> b.id == i) boards)
+
+            Nothing ->
+                Nothing
+
+
+getBoardIdByStorageKey : String -> Maybe String
+getBoardIdByStorageKey key =
+    let
+        parts =
+            key
+                |> String.split "-"
+                |> List.tail
+    in
+        case parts of
+            Just s ->
+                List.head s
+
+            Nothing ->
+                Nothing
 
 
 toogleVisibilityIfMatch : TrelloBoard -> TrelloBoard -> TrelloBoard

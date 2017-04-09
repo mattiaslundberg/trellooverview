@@ -69,12 +69,20 @@ getAfterStorageCommands ls boards =
         case getBoardByStorageKey boards ls.key of
             Just board ->
                 if board.show then
-                    trelloListLists board.id
+                    Cmd.batch [ (trelloListLists board.id), (getProgressFromStorageCmd board) ]
                 else
                     Cmd.none
 
             Nothing ->
                 Cmd.none
+
+
+getProgressFromStorageCmd : TrelloBoard -> Cmd msg
+getProgressFromStorageCmd board =
+    if (String.isEmpty board.inProgressRe) && board.show then
+        localStorageGet ("progress-" ++ board.id)
+    else
+        Cmd.none
 
 
 handleLocalStorageGot : List TrelloBoard -> LocalStorage -> List TrelloBoard
@@ -126,7 +134,7 @@ getSelectBoardCommands boards =
             map .id (filter .show boards)
 
         loadReFromStorageCommands =
-            map (\b -> localStorageGet ("progress-" ++ b)) (map .id boards)
+            map (\b -> getProgressFromStorageCmd b) boards
 
         selectionCommands =
             map (\b -> localStorageSet (LocalStorage ("show-" ++ b.id) (toString b.show))) boards

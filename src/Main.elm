@@ -38,10 +38,13 @@ update msg model =
 
         ListList lists ->
             let
+                updatedLists =
+                    decodeLists lists
+
                 updatedBoards =
-                    decodeLists model.boards lists
+                    List.map (updateLists updatedLists) model.boards
             in
-                ( { model | boards = updatedBoards }, getListUpdateCommands updatedBoards )
+                ( { model | boards = updatedBoards }, getListUpdateCommands updatedLists )
 
         CardList cards ->
             ( { model | boards = decodeCards model.boards cards }, Cmd.none )
@@ -51,52 +54,102 @@ update msg model =
                 updatedBoards =
                     decodeBoards boards
             in
-                ( { model | boards = updatedBoards }, getBoardUpdateCommands updatedBoards )
+                ( { model | boards = updatedBoards }, getBoardListCommands updatedBoards )
 
         SelectBoard board ->
             let
                 boards =
                     toogleBoard board model.boards
             in
-                ( { model | boards = boards }, getBoardUpdateCommands boards )
+                ( { model | boards = boards }, getSelectBoardCommands boards )
 
         ReChange board val ->
             ( { model | boards = updateBoardsWithProgressRe model.boards board val }, localStorageSet (LocalStorage ("progress-" ++ board.id) (val)) )
 
         LocalStorageGot ls ->
-            case getBoardByStorageKey model.boards ls.key of
-                Just board ->
-                    ( { model | boards = updateBoardsWithProgressRe model.boards board ls.value }, Cmd.none )
+            let
+                updatedBoards =
+                    handleLocalStorageGot model.boards ls
+            in
+                ( { model | boards = updatedBoards }, getAfterStorageCommands ls updatedBoards )
 
-                Nothing ->
-                    ( model, Cmd.none )
+
+getAfterStorageCommands : LocalStorage -> List TrelloBoard -> Cmd msg
+getAfterStorageCommands ls boards =
+    let
+        boardIds : List String
+        boardIds =
+            map .id (filter .show boards)
+    in
+        case getBoardByStorageKey boards ls.key of
+            Just board ->
+                if board.show then
+                    trelloListLists board.id
+                else
+                    Cmd.none
+
+            Nothing ->
+                Cmd.none
 
 
-getListUpdateCommands : List TrelloBoard -> Cmd msg
-getListUpdateCommands boards =
-    boards
-        |> filter .show
-        |> map .lists
-        |> concat
+handleLocalStorageGot : List TrelloBoard -> LocalStorage -> List TrelloBoard
+handleLocalStorageGot boards ls =
+    if String.startsWith "show-" ls.key then
+        case getBoardByStorageKey boards ls.key of
+            Just board ->
+                if String.startsWith "T" ls.value then
+                    updateBoardsWithShow boards board True
+                else
+                    updateBoardsWithShow boards board False
+
+            Nothing ->
+                boards
+    else if String.startsWith "progress-" ls.key then
+        case getBoardByStorageKey boards ls.key of
+            Just board ->
+                updateBoardsWithProgressRe boards board ls.value
+
+            Nothing ->
+                boards
+    else
+        boards
+
+
+getListUpdateCommands : List TrelloList -> Cmd msg
+getListUpdateCommands lists =
+    lists
         |> map .id
         |> map trelloListCards
         |> Cmd.batch
 
 
-getBoardUpdateCommands : List TrelloBoard -> Cmd msg
-getBoardUpdateCommands boards =
+getBoardListCommands : List TrelloBoard -> Cmd msg
+getBoardListCommands boards =
     let
         boardIds : List String
         boardIds =
             map .id (filter .show boards)
 
-        loadListCommands =
-            map trelloListLists boardIds
-
-        loadFromStorageCommands =
-            map (\b -> localStorageGet ("progress-" ++ b)) boardIds
+        selectionCommands =
+            map (\b -> localStorageGet ("show-" ++ b)) (map .id boards)
     in
-        Cmd.batch (loadListCommands ++ loadFromStorageCommands)
+        Cmd.batch selectionCommands
+
+
+getSelectBoardCommands : List TrelloBoard -> Cmd msg
+getSelectBoardCommands boards =
+    let
+        boardIds : List String
+        boardIds =
+            map .id (filter .show boards)
+
+        loadReFromStorageCommands =
+            map (\b -> localStorageGet ("progress-" ++ b)) (map .id boards)
+
+        selectionCommands =
+            map (\b -> localStorageSet (LocalStorage ("show-" ++ b.id) (toString b.show))) boards
+    in
+        Cmd.batch (loadReFromStorageCommands ++ selectionCommands)
 
 
 getBoardByStorageKey : List TrelloBoard -> String -> Maybe TrelloBoard
@@ -142,14 +195,30 @@ toogleBoard board boards =
     map (toogleVisibilityIfMatch board) boards
 
 
-updateBoardWithProgressRe : String -> TrelloBoard -> TrelloBoard
-updateBoardWithProgressRe re board =
-    { board | inProgressRe = re }
+updateBoardWithProgressRe : String -> String -> TrelloBoard -> TrelloBoard
+updateBoardWithProgressRe id re board =
+    if id == board.id then
+        { board | inProgressRe = re }
+    else
+        board
 
 
 updateBoardsWithProgressRe : List TrelloBoard -> TrelloBoard -> String -> List TrelloBoard
 updateBoardsWithProgressRe boards board re =
-    List.map (updateBoardWithProgressRe re) boards
+    List.map (updateBoardWithProgressRe board.id re) boards
+
+
+updateBoardWithShow : String -> Bool -> TrelloBoard -> TrelloBoard
+updateBoardWithShow id show board =
+    if id == board.id then
+        { board | show = show }
+    else
+        board
+
+
+updateBoardsWithShow : List TrelloBoard -> TrelloBoard -> Bool -> List TrelloBoard
+updateBoardsWithShow boards board show =
+    List.map (updateBoardWithShow board.id show) boards
 
 
 

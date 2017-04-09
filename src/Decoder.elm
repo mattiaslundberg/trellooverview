@@ -44,15 +44,15 @@ updateLists lists board =
         }
 
 
-decodeLists : List TrelloBoard -> String -> List TrelloBoard
-decodeLists boards payload =
+decodeLists : String -> List TrelloList
+decodeLists payload =
     case decodeString (list listDecoder) payload of
         Ok lists ->
-            List.map (updateLists lists) boards
+            lists
 
         Err message ->
             Debug.log message
-                boards
+                []
 
 
 updateCards : List TrelloCard -> TrelloList -> TrelloList

@@ -79,5 +79,7 @@ app.ports.localStorageSet.subscribe(function(ls) {
 app.ports.localStorageGet.subscribe(function(key) {
     console.log("get for key", key)
     var value = localStorage.getItem(key)
-    app.ports.localStorageGot.send({key: key, value: value})
+    if (value) {
+        app.ports.localStorageGot.send({key: key, value: value})
+    }
 })

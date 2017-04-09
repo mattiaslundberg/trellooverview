@@ -2,7 +2,7 @@ module Views exposing (..)
 
 import Models exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td, input)
-import Html.Attributes exposing (style, class, classList, placeholder, type_)
+import Html.Attributes exposing (style, class, classList, placeholder, type_, checked)
 import Html.Events exposing (onClick, onInput)
 import List exposing (map, length, sum, length)
 import Regex exposing (..)
@@ -122,7 +122,12 @@ getRe board =
 displayBoardSelector : TrelloBoard -> Html Msg
 displayBoardSelector board =
     div [ class "board-selector" ]
-        [ input [ type_ "checkbox", onClick (SelectBoard board) ] []
+        [ input
+            [ type_ "checkbox"
+            , onClick (SelectBoard board)
+            , checked board.show
+            ]
+            []
         , span [] [ text board.name ]
         , if board.show then
             input [ placeholder (getRe board), onInput (ReChange board) ] []

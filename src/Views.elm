@@ -2,7 +2,7 @@ module Views exposing (..)
 
 import Models exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td, input)
-import Html.Attributes exposing (style, class, classList, placeholder)
+import Html.Attributes exposing (style, class, classList, placeholder, type_)
 import Html.Events exposing (onClick, onInput)
 import List exposing (map, length, sum, length)
 import Regex exposing (..)
@@ -121,10 +121,12 @@ displayListSummary board =
 displayBoardSelector : TrelloBoard -> Html Msg
 displayBoardSelector board =
     div [ class "board-selector" ]
-        [ div [ onClick (SelectBoard board) ]
-            [ text (board.name ++ " " ++ (toString board.show))
-            ]
-        , input [ placeholder "Version.*", onInput (ReChange board) ] []
+        [ input [ type_ "checkbox", onClick (SelectBoard board) ] []
+        , span [] [ text board.name ]
+         if board.show then
+            input [ placeholder "Version.*", onInput (ReChange board) ] []
+          else
+            span [] []
         ]
 
 

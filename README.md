@@ -19,5 +19,6 @@ TODO
 
  - [x] Show loaded regex in settings view
  - [ ] Nicer view of summary
- - [ ] Load selection of boards from localstorage
+ - [x] Load selection of boards from localstorage
+ - [ ] Regex doesn't load when loading selection from localstorage
  - [ ] Figure out how to host the app

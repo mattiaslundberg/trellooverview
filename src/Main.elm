@@ -36,24 +36,6 @@ update msg model =
         AuthorizedStatus isAuthorized ->
             ( { model | isAuthorized = isAuthorized }, trelloListBoards "" )
 
-        BoardList boards ->
-            let
-                updatedBoards =
-                    decodeBoards boards
-
-                boardsToLoad =
-                    map (\b -> b.id) (filter (\b -> b.show) updatedBoards)
-            in
-                ( { model | boards = updatedBoards }
-                , Cmd.batch
-                    ((map
-                        trelloListLists
-                        boardsToLoad
-                     )
-                        ++ (map (\board -> localStorageGet ("progress-" ++ board)) boardsToLoad)
-                    )
-                )
-
         ListList lists ->
             let
                 updatedBoards =
@@ -76,22 +58,19 @@ update msg model =
         CardList cards ->
             ( { model | boards = decodeCards model.boards cards }, Cmd.none )
 
+        BoardList boards ->
+            let
+                updatedBoards =
+                    decodeBoards boards
+            in
+                ( { model | boards = updatedBoards }, getSelectionCommands updatedBoards )
+
         SelectBoard board ->
             let
                 boards =
                     toogleBoard board model.boards
-
-                boardsToLoad =
-                    map (\b -> b.id) (filter (\b -> b.show) boards)
             in
-                ( { model | boards = boards }
-                , Cmd.batch
-                    ((map trelloListLists
-                        boardsToLoad
-                     )
-                        ++ (map (\board -> localStorageGet ("progress-" ++ board)) boardsToLoad)
-                    )
-                )
+                ( { model | boards = boards }, getSelectionCommands boards )
 
         ReChange board val ->
             ( { model | boards = updateBoardsWithProgressRe model.boards board val }, localStorageSet (LocalStorage ("progress-" ++ board.id) (val)) )
@@ -103,6 +82,22 @@ update msg model =
 
                 Nothing ->
                     ( model, Cmd.none )
+
+
+getSelectionCommands : List TrelloBoard -> Cmd msg
+getSelectionCommands boards =
+    let
+        boardIds : List String
+        boardIds =
+            map .id (filter .show boards)
+
+        loadListCommands =
+            map trelloListLists boardIds
+
+        loadFromStorageCommands =
+            map (\b -> localStorageGet ("progress-" ++ b)) boardIds
+    in
+        Cmd.batch (loadListCommands ++ loadFromStorageCommands)
 
 
 getBoardByStorageKey : List TrelloBoard -> String -> Maybe TrelloBoard

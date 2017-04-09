@@ -21,12 +21,15 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    Model False [] ! [ trelloAuthorize "" ]
+    Model False False [] ! [ trelloAuthorize "" ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ToggleSettings ->
+            ( { model | showSettings = not model.showSettings }, Cmd.none )
+
         IsAuhorized ->
             ( model, trelloAuthorized "" )
 

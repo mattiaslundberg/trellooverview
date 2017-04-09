@@ -165,6 +165,19 @@ displayTimeSummary board =
         ]
 
 
+displaySettingButton : Html Msg
+displaySettingButton =
+    button [ class "settings-button", onClick ToggleSettings ] [ text "Toggle Settings" ]
+
+
+displaySettings : Model -> Html Msg
+displaySettings model =
+    if model.showSettings then
+        div [] (List.map displayBoardSelector model.boards)
+    else
+        div [] []
+
+
 view : Model -> Html Msg
 view model =
     let
@@ -173,7 +186,8 @@ view model =
     in
         div
             [ class "wrapper" ]
-            [ div [] (List.map displayBoardSelector model.boards)
+            [ displaySettingButton
+            , (displaySettings model)
             , div [ class "board-wrapper" ]
                 (List.map displayListSummary boards)
             , div [ class "summary-wrapper" ]

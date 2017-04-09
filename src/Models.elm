@@ -3,12 +3,14 @@ module Models exposing (..)
 
 type alias Model =
     { isAuthorized : Bool
+    , showSettings : Bool
     , boards : List TrelloBoard
     }
 
 
 type Msg
     = IsAuhorized
+    | ToggleSettings
     | AuthorizedStatus Bool
     | BoardList String
     | ListList String

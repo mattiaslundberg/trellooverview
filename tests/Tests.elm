@@ -4,6 +4,7 @@ import Test exposing (..)
 import CardTime
 import SummaryTime
 import DecoderTests
+import BoardHelperTests
 
 
 all : Test
@@ -12,4 +13,5 @@ all =
         [ CardTime.all
         , SummaryTime.all
         , DecoderTests.all
+        , BoardHelperTests.all
         ]

@@ -143,33 +143,35 @@ getBoardTimeSummary board includeDone includeNotDone =
         |> List.sum
 
 
-getBoardTimeSummaryDisplay : TrelloBoard -> String
-getBoardTimeSummaryDisplay board =
+getBoardTimeDone : TrelloBoard -> Float
+getBoardTimeDone board =
+    getBoardTimeSummary board True False
+
+
+getBoardTimeRemaining : TrelloBoard -> Float
+getBoardTimeRemaining board =
+    getBoardTimeSummary board False True
+
+
+getBoardPercentage : TrelloBoard -> Int
+getBoardPercentage board =
     let
-        timeDone =
-            getBoardTimeSummary board True False
-
         timeRemaining =
-            getBoardTimeSummary board False True
+            getBoardTimeRemaining board
 
-        percentage =
-            round (100 * (timeRemaining / (timeDone + timeRemaining)))
+        timeDone =
+            getBoardTimeDone board
     in
-        "Done: "
-            ++ (toString timeDone)
-            ++ " "
-            ++ "Remaining: "
-            ++ (toString timeRemaining)
-            ++ " "
-            ++ "Percentage remaining: "
-            ++ (toString percentage)
-            ++ "%"
+        round (100 * (timeRemaining / (timeDone + timeRemaining)))
 
 
 displayTimeSummary : TrelloBoard -> Html Msg
 displayTimeSummary board =
     div [ class "board-timing" ]
-        [ text (board.name ++ " " ++ (getBoardTimeSummaryDisplay board))
+        [ div [ class "title" ] [ text board.name ]
+        , div [ class "percentage" ] [ text ((toString (getBoardPercentage board)) ++ "%") ]
+        , div [ class "text" ] [ text ("Remaining: " ++ (toString (getBoardTimeRemaining board))) ]
+        , div [ class "text" ] [ text ("Done: " ++ (toString (getBoardTimeDone board))) ]
         ]
 
 

@@ -111,13 +111,21 @@ getTimeFromList inProgressRe includeDone includeNotDone list =
         doneCount + remainingCount
 
 
+getRe : TrelloBoard -> String
+getRe board =
+    if not (String.isEmpty board.inProgressRe) then
+        board.inProgressRe
+    else
+        "Version.*"
+
+
 displayBoardSelector : TrelloBoard -> Html Msg
 displayBoardSelector board =
     div [ class "board-selector" ]
         [ input [ type_ "checkbox", onClick (SelectBoard board) ] []
         , span [] [ text board.name ]
         , if board.show then
-            input [ placeholder "Version.*", onInput (ReChange board) ] []
+            input [ placeholder (getRe board), onInput (ReChange board) ] []
           else
             span [] []
         ]

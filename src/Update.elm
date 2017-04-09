@@ -82,10 +82,7 @@ handleLocalStorageGot boards ls =
     if String.startsWith "show-" ls.key then
         case getBoardByStorageKey boards ls.key of
             Just board ->
-                if String.startsWith "T" ls.value then
-                    updateBoardsWithShow boards board True
-                else
-                    updateBoardsWithShow boards board False
+                updateBoardsWithShow boards board (String.startsWith "T" ls.value)
 
             Nothing ->
                 boards

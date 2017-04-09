@@ -13,3 +13,11 @@ Elm application showing an overview for multiple trello boards
 # Deployment
 
 TODO
+
+
+# TODO
+
+ - [ ] Show loaded regex in settings view
+ - [ ] Nicer view of summary
+ - [ ] Load selection of boards from localstorage
+ - [ ] Figure out how to host the app

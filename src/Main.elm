@@ -7,6 +7,7 @@ import Models exposing (..)
 import Views exposing (view)
 import Html exposing (program)
 import Decoder exposing (..)
+import Subscriptions exposing (subscriptions)
 
 
 main : Program Never Model Msg
@@ -219,18 +220,3 @@ updateBoardWithShow id show board =
 updateBoardsWithShow : List TrelloBoard -> TrelloBoard -> Bool -> List TrelloBoard
 updateBoardsWithShow boards board show =
     List.map (updateBoardWithShow board.id show) boards
-
-
-
--- SUBSCRIPTIONS
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.batch
-        [ trelloAuthorizedResponse AuthorizedStatus
-        , trelloBoards BoardList
-        , localStorageGot LocalStorageGot
-        , trelloList ListList
-        , trelloCards CardList
-        ]

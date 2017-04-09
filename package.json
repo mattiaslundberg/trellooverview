@@ -8,6 +8,7 @@
     "elm": "^0.18.0",
     "elm-format": "^0.6.1-alpha",
     "elm-oracle": "^1.1.1",
-    "elm-test": "^0.18.2"
+    "elm-test": "^0.18.2",
+    "js-beautify": "^1.6.12"
   }
 }

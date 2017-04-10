@@ -21,7 +21,7 @@ script:
   - yarn uglifyjs -- build/elm.js -o build/elm.min.js
   - yarn uglifyjs -- src/index.js -o build/index.min.js
   - cp src/prod.html build/index.html
-  - cp styles.css build/styles.css
+  - cp src/styles.css build/styles.css
 
 deploy:
   provider: gcs

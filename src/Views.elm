@@ -161,8 +161,14 @@ getBoardPercentage board =
 
         timeDone =
             getBoardTimeDone board
+
+        percentage =
+            100 * (timeRemaining / (timeDone + timeRemaining))
     in
-        round (100 * (timeRemaining / (timeDone + timeRemaining)))
+        if isNaN percentage then
+            0
+        else
+            round percentage
 
 
 displayTimeSummary : TrelloBoard -> Html Msg

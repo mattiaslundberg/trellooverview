@@ -1,8 +1,9 @@
+window.onload = function () {
 // Start TrelloOverview app
 while (document.body.firstChild) {
   document.body.removeChild(document.body.firstChild)
 }
-var app = runElmProgram()
+var app = Elm.Main.embed(document.body)
 
 // Connect trello client js to elm application
 app.ports.trelloAuthorized.subscribe(function() {
@@ -83,3 +84,4 @@ app.ports.localStorageGet.subscribe(function(key) {
     app.ports.localStorageGot.send({key: key, value: value})
   }
 })
+}

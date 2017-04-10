@@ -1,0 +1,11 @@
+parserOptions:
+  ecmaVersion: 5
+  sourceType: module
+
+rules:
+  'indent': [2, 2, {SwitchCase: 1}]
+  'linebreak-style': [2, 'unix']
+  'no-irregular-whitespace': 2
+  'no-mixed-spaces-and-tabs': 2
+  'no-trailing-spaces': 2
+  'no-whitespace-before-property': 2

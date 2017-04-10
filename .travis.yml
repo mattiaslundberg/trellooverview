@@ -13,9 +13,14 @@ cache:
 install:
   - yarn install
   - elm package install --yes
+  - mkdir -p build
 
 script:
   - yarn elm-test
+  - yarn elm-make -- src/Main.elm --output build/elm.js
+  - yarn uglifyjs -- build/elm.js -o build/elm.min.js
+  - yarn uglifyjs -- src/index.js -o build/index.min.js
+  - cp src/prod.html build.index.html
 
 deploy:
   provider: gcs
@@ -26,6 +31,9 @@ deploy:
   bucket: "trellooverviewhosting"
   skip_cleanup: true
   acl: public-read
+  local_dir: build
+  detect_encoding: true
+  cache_control: "max-age=3600"
   on:
     branch: master
     repo: mattiaslundberg/trellooverview

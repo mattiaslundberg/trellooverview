@@ -28,4 +28,4 @@ deploy:
   acl: public-read
   on:
     branch: master
-    repo: mattiaslundberg/trelloverview
+    repo: mattiaslundberg/trellooverview

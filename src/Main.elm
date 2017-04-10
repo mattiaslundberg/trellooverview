@@ -1,12 +1,9 @@
 module Main exposing (..)
 
-import Html.Events exposing (onClick, onInput)
-import List exposing (..)
 import Ports exposing (..)
 import Models exposing (..)
 import Views exposing (view)
 import Html exposing (program)
-import Decoder exposing (..)
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
 

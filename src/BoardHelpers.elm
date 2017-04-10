@@ -7,7 +7,7 @@ getBoardByStorageKey : List TrelloBoard -> String -> Maybe TrelloBoard
 getBoardByStorageKey boards key =
     case getBoardIdByStorageKey key of
         Just id ->
-            List.head (List.filter (\b -> b.id == id) boards)
+            getBoardById boards id
 
         Nothing ->
             Nothing
@@ -28,3 +28,8 @@ getBoardIdList key =
     key
         |> String.split "-"
         |> List.tail
+
+
+getBoardById : List TrelloBoard -> String -> Maybe TrelloBoard
+getBoardById boards id =
+    List.head (List.filter (\b -> b.id == id) boards)

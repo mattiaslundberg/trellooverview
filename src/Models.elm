@@ -1,5 +1,7 @@
 module Models exposing (..)
 
+import Time exposing (Time)
+
 
 type alias Model =
     { isAuthorized : Bool
@@ -17,6 +19,7 @@ type Msg
     | SelectBoard TrelloBoard
     | LocalStorageGot LocalStorage
     | ReChange TrelloBoard String
+    | Update Time
 
 
 type alias LocalStorage =

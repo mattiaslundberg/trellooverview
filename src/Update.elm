@@ -1,12 +1,9 @@
 module Update exposing (..)
 
 import Models exposing (..)
-import Html.Events exposing (onClick, onInput)
 import List exposing (..)
 import Ports exposing (..)
 import Models exposing (..)
-import Views exposing (view)
-import Html exposing (program)
 import Decoder exposing (..)
 import BoardHelpers exposing (..)
 
@@ -14,6 +11,9 @@ import BoardHelpers exposing (..)
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Update time ->
+            ( model, trelloListBoards "" )
+
         ToggleSettings ->
             ( { model | showSettings = not model.showSettings }, Cmd.none )
 

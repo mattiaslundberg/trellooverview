@@ -1,4 +1,8 @@
-Elm application showing an overview for multiple trello boards
+Elm application showing an overview of times for multiple trello boards.
+
+# Description
+
+Calculates the done and remaining times for a trello board depending on times added to each card. The time for a card is added in the card name, for example "My card (5)" for a card taking 5 time units. The application will pull selected boards from the trello api and calculate the number of done time units (detected from list name "`Done.*`") and remaining time units (detected from list name "`Version.*`" or configured regex).
 
 
 # Getting started (development)
@@ -8,17 +12,3 @@ Elm application showing an overview for multiple trello boards
 3. Run `yarn elm-package install` to install all elm dependencies
 4. Run `yarn elm-reactor` to run local development server
 5. Run tests with `yarn elm-test -- --watch`
-
-
-# Deployment
-
-TODO
-
-
-# TODO
-
- - [x] Show loaded regex in settings view
- - [x] Nicer view of summary
- - [x] Load selection of boards from localstorage
- - [x] Regex doesn't load when loading selection from localstorage
- - [ ] Figure out how to host the app

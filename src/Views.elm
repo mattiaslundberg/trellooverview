@@ -8,34 +8,20 @@ import List exposing (map, length, sum, length)
 import Regex exposing (..)
 
 
-findTime : String -> Maybe String
-findTime s =
-    case List.head (findTimeInString s) of
-        Just val ->
-            val
-
-        Nothing ->
-            Nothing
-
-
 getTimeFromCard : TrelloCard -> Float
 getTimeFromCard card =
-    case findTime card.name of
-        Just val ->
-            case String.toFloat val of
-                Ok v ->
-                    v
-
-                Err msg ->
-                    0.0
-
-        Nothing ->
-            0.0
+    card.name
+        |> findTimeInString
+        |> List.head
+        |> Maybe.withDefault Nothing
+        |> Maybe.withDefault "0.0"
+        |> String.toFloat
+        |> Result.withDefault 0.0
 
 
 findTimeInString : String -> List (Maybe String)
 findTimeInString s =
-    case List.head (find (AtMost 1) (regex ".* \\(([\\d\\.\\,]+)\\)") s) of
+    case findOneOrNothing s ".* \\(([\\d\\.\\,]+)\\)" of
         Just val ->
             val.submatches
 
@@ -57,9 +43,14 @@ cardCount board =
         sum cards
 
 
+findOneOrNothing : String -> String -> Maybe Match
+findOneOrNothing string re =
+    List.head (find (AtMost 1) (regex re) string)
+
+
 listMatches : String -> String -> Bool
-listMatches list re =
-    case List.head (find (AtMost 1) (regex re) list) of
+listMatches listName re =
+    case findOneOrNothing listName re of
         Just val ->
             True
 
@@ -67,18 +58,9 @@ listMatches list re =
             False
 
 
-
--- This should be a user-configurable expression
-
-
-doneRe : String
-doneRe =
-    "Done.*"
-
-
 listIsDone : String -> Bool
 listIsDone list =
-    listMatches list doneRe
+    listMatches list "Done.*"
 
 
 listIsRemaining : String -> String -> Bool

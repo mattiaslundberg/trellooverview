@@ -5,22 +5,14 @@ import Models exposing (..)
 
 getBoardByStorageKey : List TrelloBoard -> String -> Maybe TrelloBoard
 getBoardByStorageKey boards key =
-    case getBoardIdByStorageKey key of
-        Just id ->
-            getBoardById boards id
-
-        Nothing ->
-            Nothing
+    key
+        |> getBoardIdByStorageKey
+        |> Maybe.andThen (getBoardById boards)
 
 
 getBoardIdByStorageKey : String -> Maybe String
 getBoardIdByStorageKey key =
-    case getBoardIdList key of
-        Just s ->
-            List.head s
-
-        Nothing ->
-            Nothing
+    key |> getBoardIdList |> Maybe.andThen List.head
 
 
 getBoardIdList : String -> Maybe (List String)

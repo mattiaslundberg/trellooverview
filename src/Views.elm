@@ -178,14 +178,10 @@ displaySettings model =
 
 view : Model -> Html Msg
 view model =
-    let
-        boards =
-            getBoardsToShow model.boards
-    in
-        div
-            [ class "wrapper" ]
-            [ displaySettingButton
-            , (displaySettings model)
-            , div [ class "summary-wrapper" ]
-                (List.map displayTimeSummary boards)
-            ]
+    div
+        [ class "wrapper" ]
+        [ displaySettingButton
+        , (displaySettings model)
+        , div [ class "summary-wrapper" ]
+            (List.map displayTimeSummary (getBoardsToShow model.boards))
+        ]

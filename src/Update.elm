@@ -59,22 +59,19 @@ update msg model =
                 ( { model | boards = updatedBoards }, getAfterStorageCommands ls updatedBoards )
 
 
+getBoardCommands : TrelloBoard -> Maybe (Cmd msg)
+getBoardCommands board =
+    if board.show then
+        Just (Cmd.batch [ (trelloListLists board.id), (getProgressFromStorageCmd board) ])
+    else
+        Nothing
+
+
 getAfterStorageCommands : LocalStorage -> List TrelloBoard -> Cmd msg
 getAfterStorageCommands ls boards =
-    let
-        boardIds : List String
-        boardIds =
-            map .id (filter .show boards)
-    in
-        case getBoardByStorageKey boards ls.key of
-            Just board ->
-                if board.show then
-                    Cmd.batch [ (trelloListLists board.id), (getProgressFromStorageCmd board) ]
-                else
-                    Cmd.none
-
-            Nothing ->
-                Cmd.none
+    getBoardByStorageKey boards ls.key
+        |> Maybe.andThen getBoardCommands
+        |> Maybe.withDefault Cmd.none
 
 
 getProgressFromStorageCmd : TrelloBoard -> Cmd msg

@@ -85,21 +85,31 @@ getProgressFromStorageCmd board =
 handleLocalStorageGot : List TrelloBoard -> LocalStorage -> List TrelloBoard
 handleLocalStorageGot boards ls =
     if String.startsWith "show-" ls.key then
-        case getBoardByStorageKey boards ls.key of
-            Just board ->
-                updateBoardsWithShow boards board (String.startsWith "T" ls.value)
-
-            Nothing ->
-                boards
+        handleLocalStorageGotShow boards ls
     else if String.startsWith "progress-" ls.key then
-        case getBoardByStorageKey boards ls.key of
-            Just board ->
-                updateBoardsWithProgressRe boards board ls.value
-
-            Nothing ->
-                boards
+        handleLocalStorageGotRe boards ls
     else
         boards
+
+
+handleLocalStorageGotShow : List TrelloBoard -> LocalStorage -> List TrelloBoard
+handleLocalStorageGotShow boards ls =
+    case getBoardByStorageKey boards ls.key of
+        Just board ->
+            updateBoardsWithShow boards board (String.startsWith "T" ls.value)
+
+        Nothing ->
+            boards
+
+
+handleLocalStorageGotRe : List TrelloBoard -> LocalStorage -> List TrelloBoard
+handleLocalStorageGotRe boards ls =
+    case getBoardByStorageKey boards ls.key of
+        Just board ->
+            updateBoardsWithProgressRe boards board ls.value
+
+        Nothing ->
+            boards
 
 
 getListUpdateCommands : List TrelloList -> Cmd msg

@@ -119,16 +119,18 @@ getBoardListCommands boards =
         Cmd.batch selectionCommands
 
 
+getSaveSelectionCommands : List TrelloBoard -> List (Cmd msg)
+getSaveSelectionCommands boards =
+    map (\b -> localStorageSet (LocalStorage ("show-" ++ b.id) (toString b.show))) boards
+
+
 getSelectBoardCommands : List TrelloBoard -> Cmd msg
 getSelectBoardCommands boards =
     let
         loadReFromStorageCommands =
             map (\b -> getProgressFromStorageCmd b) boards
-
-        selectionCommands =
-            map (\b -> localStorageSet (LocalStorage ("show-" ++ b.id) (toString b.show))) boards
     in
-        Cmd.batch (loadReFromStorageCommands ++ selectionCommands)
+        Cmd.batch (loadReFromStorageCommands ++ getSaveSelectionCommands boards)
 
 
 toogleVisibilityIfMatch : TrelloBoard -> TrelloBoard -> TrelloBoard

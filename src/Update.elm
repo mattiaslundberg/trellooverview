@@ -113,10 +113,6 @@ getListUpdateCommands lists =
 getBoardListCommands : List TrelloBoard -> Cmd msg
 getBoardListCommands boards =
     let
-        boardIds : List String
-        boardIds =
-            map .id (filter .show boards)
-
         selectionCommands =
             map (\b -> localStorageGet ("show-" ++ b)) (map .id boards)
     in
@@ -126,10 +122,6 @@ getBoardListCommands boards =
 getSelectBoardCommands : List TrelloBoard -> Cmd msg
 getSelectBoardCommands boards =
     let
-        boardIds : List String
-        boardIds =
-            map .id (filter .show boards)
-
         loadReFromStorageCommands =
             map (\b -> getProgressFromStorageCmd b) boards
 

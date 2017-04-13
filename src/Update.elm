@@ -112,11 +112,7 @@ getListUpdateCommands lists =
 
 getBoardListCommands : List TrelloBoard -> Cmd msg
 getBoardListCommands boards =
-    let
-        selectionCommands =
-            map (\b -> localStorageGet ("show-" ++ b)) (map .id boards)
-    in
-        Cmd.batch selectionCommands
+    Cmd.batch (map (\b -> localStorageGet ("show-" ++ b)) (map .id boards))
 
 
 getSaveSelectionCommands : List TrelloBoard -> List (Cmd msg)

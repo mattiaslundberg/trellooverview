@@ -2,7 +2,7 @@ module Views exposing (..)
 
 import Models exposing (..)
 import Html exposing (Html, button, div, text, span, program, table, tr, td, input)
-import Html.Attributes exposing (style, class, classList, placeholder, type_, checked)
+import Html.Attributes exposing (style, class, classList, type_, checked, value)
 import Html.Events exposing (onClick, onInput)
 import List exposing (map, length, sum, length)
 import Regex exposing (..)
@@ -112,7 +112,7 @@ displayBoardSelector board =
             []
         , span [] [ text board.name ]
         , if board.show then
-            input [ placeholder (getRe board), onInput (ReChange board) ] []
+            input [ value (getRe board), onInput (ReChange board) ] []
           else
             span [] []
         ]

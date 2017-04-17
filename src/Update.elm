@@ -12,7 +12,12 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Update time ->
-            ( model, trelloListBoards "" )
+            ( model
+            , if model.isAuthorized then
+                trelloListBoards ""
+              else
+                Cmd.none
+            )
 
         ToggleSettings ->
             ( { model | showSettings = not model.showSettings }, Cmd.none )

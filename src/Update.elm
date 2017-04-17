@@ -63,16 +63,21 @@ update msg model =
             ( { model | boards = updateBoardsWithProgressRe model.boards board val }, localStorageSet (LocalStorage ("progress-" ++ board.id) (val)) )
 
         LocalStorageGot ls ->
+            handleLocalStorageGot model ls
+
+
+handleLocalStorageGot : Model -> LocalStorage -> ( Model, Cmd Msg )
+handleLocalStorageGot model ls =
+    case ls.key of
+        "trello_token" ->
+            ( model, trelloAuthorize "" )
+
+        _ ->
             let
                 updatedBoards =
-                    handleLocalStorageGot model.boards ls
+                    handleLocalStorageGotSetting model.boards ls
             in
-                case ls.key of
-                    "trello_token" ->
-                        ( model, trelloAuthorize "" )
-
-                    _ ->
-                        ( { model | boards = updatedBoards }, getAfterStorageCommands ls updatedBoards )
+                ( { model | boards = updatedBoards }, getAfterStorageCommands ls updatedBoards )
 
 
 getBoardCommands : TrelloBoard -> Maybe (Cmd msg)
@@ -98,8 +103,8 @@ getProgressFromStorageCmd board =
         Cmd.none
 
 
-handleLocalStorageGot : List TrelloBoard -> LocalStorage -> List TrelloBoard
-handleLocalStorageGot boards ls =
+handleLocalStorageGotSetting : List TrelloBoard -> LocalStorage -> List TrelloBoard
+handleLocalStorageGotSetting boards ls =
     if String.startsWith "show-" ls.key then
         handleLocalStorageGotShow boards ls
     else if String.startsWith "progress-" ls.key then

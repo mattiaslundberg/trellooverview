@@ -12,12 +12,7 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Update time ->
-            ( model
-            , if model.isAuthorized then
-                trelloListBoards ""
-              else
-                Cmd.none
-            )
+            ( model, getBoardListCmd model.isAuthorized )
 
         ToggleSettings ->
             ( { model | showSettings = not model.showSettings }, Cmd.none )
@@ -64,6 +59,14 @@ update msg model =
 
         LocalStorageGot ls ->
             handleLocalStorageGot model ls
+
+
+getBoardListCmd : Bool -> Cmd Msg
+getBoardListCmd isAuthorized =
+    if isAuthorized then
+        trelloListBoards ""
+    else
+        Cmd.none
 
 
 handleLocalStorageGot : Model -> LocalStorage -> ( Model, Cmd Msg )

@@ -17,11 +17,14 @@ update msg model =
         ToggleSettings ->
             ( { model | showSettings = not model.showSettings }, Cmd.none )
 
+        Authorize ->
+            ( { model | allowLogin = True }, trelloAuthorize "" )
+
         IsAuthorized _ ->
             ( { model | isAuthorized = True }, trelloListBoards "" )
 
         IsNotAuthorized _ ->
-            ( { model | isAuthorized = False }, trelloAuthorize "" )
+            ( { model | isAuthorized = False }, Cmd.none )
 
         ListList lists ->
             let

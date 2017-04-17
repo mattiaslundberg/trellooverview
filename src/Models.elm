@@ -13,6 +13,7 @@ type alias Model =
 
 type Msg
     = ToggleSettings
+    | Authorize
     | IsAuthorized Bool
     | IsNotAuthorized Bool
     | BoardList String

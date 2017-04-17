@@ -178,10 +178,20 @@ displaySettings model =
 
 view : Model -> Html Msg
 view model =
-    div
-        [ class "wrapper" ]
-        [ displaySettingButton
-        , (displaySettings model)
-        , div [ class "summary-wrapper" ]
-            (List.map displayTimeSummary (getBoardsToShow model.boards))
-        ]
+    if model.isAuthorized then
+        div
+            [ class "wrapper" ]
+            [ displaySettingButton
+            , (displaySettings model)
+            , div [ class "summary-wrapper" ]
+                (List.map displayTimeSummary (getBoardsToShow model.boards))
+            ]
+    else
+        div
+            [ class "wrapper" ]
+            [ button
+                [ class "settings-button"
+                , onClick Authorize
+                ]
+                [ text "Login" ]
+            ]

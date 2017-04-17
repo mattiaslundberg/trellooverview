@@ -21,7 +21,7 @@ update msg model =
             ( { model | isAuthorized = True }, trelloListBoards "" )
 
         IsNotAuthorized _ ->
-            ( { model | isAuthorized = False }, Cmd.none )
+            ( { model | isAuthorized = False }, trelloAuthorize "" )
 
         ListList lists ->
             let

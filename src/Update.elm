@@ -29,7 +29,7 @@ update msg model =
             ( { model | isAuthorized = True }, trelloListBoards "" )
 
         IsNotAuthorized _ ->
-            ( { model | isAuthorized = False }, Cmd.none )
+            ( { model | isAuthorized = False }, localStorageGet "trello_token" )
 
         ListList lists ->
             let
@@ -67,7 +67,12 @@ update msg model =
                 updatedBoards =
                     handleLocalStorageGot model.boards ls
             in
-                ( { model | boards = updatedBoards }, getAfterStorageCommands ls updatedBoards )
+                case ls.key of
+                    "trello_token" ->
+                        ( model, trelloAuthorize "" )
+
+                    _ ->
+                        ( { model | boards = updatedBoards }, getAfterStorageCommands ls updatedBoards )
 
 
 getBoardCommands : TrelloBoard -> Maybe (Cmd msg)

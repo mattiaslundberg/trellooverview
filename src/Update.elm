@@ -55,7 +55,7 @@ update msg model =
                 ( { model | boards = boards }, getSelectBoardCommands boards )
 
         ReChange board val ->
-            ( { model | boards = updateBoardsWithProgressRe model.boards board val }, localStorageSet (LocalStorage ("progress-" ++ board.id) (val)) )
+            ( { model | boards = updateBoardsWithProgressRe model.boards board val }, localStorageSet (LocalStorage (getReKey board) (val)) )
 
         LocalStorageGot ls ->
             handleLocalStorageGot model ls
@@ -101,7 +101,7 @@ getAfterStorageCommands ls boards =
 getProgressFromStorageCmd : TrelloBoard -> Cmd msg
 getProgressFromStorageCmd board =
     if (String.isEmpty board.inProgressRe) && board.show then
-        localStorageGet ("progress-" ++ board.id)
+        localStorageGet (getReKey board)
     else
         Cmd.none
 
@@ -146,12 +146,12 @@ getListUpdateCommands lists =
 
 getBoardListCommands : List TrelloBoard -> Cmd msg
 getBoardListCommands boards =
-    Cmd.batch (map (\b -> localStorageGet ("show-" ++ b)) (map .id boards))
+    Cmd.batch (map (\b -> localStorageGet (getShowKey b)) boards)
 
 
 getSaveSelectionCommands : List TrelloBoard -> List (Cmd msg)
 getSaveSelectionCommands boards =
-    map (\b -> localStorageSet (LocalStorage ("show-" ++ b.id) (toString b.show))) boards
+    map (\b -> localStorageSet (LocalStorage (getShowKey b) (toString b.show))) boards
 
 
 getProgressCommands : List TrelloBoard -> List (Cmd msg)

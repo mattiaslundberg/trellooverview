@@ -25,3 +25,13 @@ getBoardIdList key =
 getBoardById : List TrelloBoard -> String -> Maybe TrelloBoard
 getBoardById boards id =
     List.head (List.filter (\b -> b.id == id) boards)
+
+
+getShowKey : TrelloBoard -> String
+getShowKey board =
+    "show-" ++ board.id
+
+
+getReKey : TrelloBoard -> String
+getReKey board =
+    "progress-" ++ board.id

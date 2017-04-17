@@ -5,6 +5,7 @@ import Time exposing (Time)
 
 type alias Model =
     { isAuthorized : Bool
+    , allowLogin : Bool
     , showSettings : Bool
     , boards : List TrelloBoard
     }

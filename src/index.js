@@ -6,9 +6,13 @@ while (document.body.firstChild) {
 var app = Elm.Main.embed(document.body)
 
 // Connect trello client js to elm application
-app.ports.trelloAuthorized.subscribe(function() {
+app.ports.trelloCheckAuthorized.subscribe(function() {
   var isAuthorized = Trello.authorized()
-  app.ports.trelloAuthorizedResponse.send(isAuthorized)
+  if (isAuthorized) {
+    app.ports.trelloIsAuthorized.send(true)
+  } else {
+    app.ports.trelloIsNotAuthorized.send(true)
+  }
 })
 
 app.ports.trelloAuthorize.subscribe(function() {
@@ -22,7 +26,7 @@ app.ports.trelloAuthorize.subscribe(function() {
     expiration: 'never',
     success: function() {
       console.log("Success")
-      app.ports.trelloAuthorizedResponse.send(true)
+      app.ports.trelloIsAuthorized.send(true)
     },
     error: function() {
       console.log("Error")

@@ -8,7 +8,8 @@ import Time exposing (every, minute)
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ trelloAuthorizedResponse AuthorizedStatus
+        [ trelloIsAuthorized IsAuthorized
+        , trelloIsNotAuthorized IsNotAuthorized
         , trelloBoards BoardList
         , localStorageGot LocalStorageGot
         , trelloList ListList

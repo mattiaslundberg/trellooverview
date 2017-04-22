@@ -10,7 +10,8 @@ subscriptions model =
     Sub.batch
         [ trelloIsAuthorized IsAuthorized
         , trelloIsNotAuthorized IsNotAuthorized
-        , trelloBoards BoardList
+
+        -- , trelloBoards BoardList
         , localStorageGot LocalStorageGot
         , trelloList ListList
         , trelloCards CardList

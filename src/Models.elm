@@ -1,6 +1,7 @@
 module Models exposing (..)
 
 import Time exposing (Time)
+import Http
 
 
 type alias Model =
@@ -8,6 +9,7 @@ type alias Model =
     , allowLogin : Bool
     , showSettings : Bool
     , boards : List TrelloBoard
+    , token : String
     }
 
 
@@ -16,7 +18,7 @@ type Msg
     | Authorize
     | IsAuthorized Bool
     | IsNotAuthorized Bool
-    | BoardList String
+    | BoardList (Result Http.Error (List TrelloBoard))
     | ListList String
     | CardList String
     | SelectBoard TrelloBoard

@@ -6,13 +6,15 @@ import Ports exposing (..)
 import Models exposing (..)
 import Decoder exposing (..)
 import BoardHelpers exposing (..)
+import Json.Decode exposing (list)
+import Http
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Update time ->
-            ( model, getBoardListCmd model.isAuthorized )
+            ( model, getBoardListCmd model )
 
         ToggleSettings ->
             ( { model | showSettings = not model.showSettings }, Cmd.none )
@@ -40,12 +42,12 @@ update msg model =
             in
                 ( { model | boards = updatedBoards }, Cmd.none )
 
-        BoardList boards ->
-            let
-                updatedBoards =
-                    decodeBoards boards
-            in
-                ( { model | boards = updatedBoards }, getBoardListCommands updatedBoards )
+        BoardList (Ok updatedBoards) ->
+            ( { model | boards = updatedBoards }, getBoardListCommands updatedBoards )
+
+        BoardList (Err e) ->
+            Debug.log (toString e)
+                ( model, Cmd.none )
 
         SelectBoard board ->
             let
@@ -61,19 +63,29 @@ update msg model =
             handleLocalStorageGot model ls
 
 
-getBoardListCmd : Bool -> Cmd Msg
-getBoardListCmd isAuthorized =
-    if isAuthorized then
-        trelloListBoards ""
+getBoardListCmd : Model -> Cmd Msg
+getBoardListCmd model =
+    if model.isAuthorized then
+        Http.send BoardList (getBoardList model)
     else
         Cmd.none
+
+
+getBoardList : Model -> Http.Request (List TrelloBoard)
+getBoardList model =
+    Http.get (buildBoardUrl model) (list boardDecoder)
+
+
+buildBoardUrl : Model -> String
+buildBoardUrl model =
+    "https://api.trello.com/1/members/me/boards?key=35a2be579776824775ad4d6f05d4852b&fields=name%2C%20id&token=" ++ model.token
 
 
 handleLocalStorageGot : Model -> LocalStorage -> ( Model, Cmd Msg )
 handleLocalStorageGot model ls =
     case ls.key of
         "trello_token" ->
-            ( model, trelloAuthorize "" )
+            ( { model | token = ls.value }, trelloAuthorize "" )
 
         _ ->
             let

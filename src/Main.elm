@@ -20,4 +20,4 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    Model False False False [] ! [ trelloCheckAuthorized "" ]
+    Model False False False [] "" ! [ trelloCheckAuthorized "" ]

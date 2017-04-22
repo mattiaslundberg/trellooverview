@@ -3,7 +3,13 @@ window.onload = function () {
   while (document.body.firstChild) {
     document.body.removeChild(document.body.firstChild)
   }
-  var app = Elm.Main.embed(document.body)
+
+  var app
+  if (typeof runElmProgram !== "undefined") {
+    app = runElmProgram()
+  } else {
+    app = Elm.Main.fullscreen()
+  }
 
   // Connect trello client js to elm application
   app.ports.trelloCheckAuthorized.subscribe(function() {

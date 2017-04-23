@@ -17,6 +17,3 @@ Calculates the done and remaining times for a trello board depending on times ad
 # TODO
 
  - [ ] Remove authorization through trello.js, use elm code instead
- - [x] Minimize the number of api-calls, get all lists and cards at the same time
- - [ ] Add documentation inside the application
- - [ ] Add github link in the application

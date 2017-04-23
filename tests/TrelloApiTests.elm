@@ -23,7 +23,7 @@ all =
             \() ->
                 let
                     json =
-                        "[{\"name\": \"somename\", \"id\": \"someid\", \"idBoard\": \"board\"}]"
+                        "[{\"name\": \"somename\", \"id\": \"someid\", \"idBoard\": \"board\", \"cards\": []}]"
                 in
                     Expect.equal
                         (Ok [ TrelloList [] "somename" "someid" "board" ])

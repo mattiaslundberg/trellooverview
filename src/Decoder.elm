@@ -22,7 +22,8 @@ getBoardList model =
 
 buildBoardUrl : Model -> String
 buildBoardUrl model =
-    "https://api.trello.com/1/members/me/boards?key=35a2be579776824775ad4d6f05d4852b&fields=name%2C%20id&token=" ++ model.token
+    "https://api.trello.com/1/members/me/boards?key=35a2be579776824775ad4d6f05d4852b&fields=name%2C%20id&token="
+        ++ model.token
 
 
 boardDecoder : Decoder TrelloBoard
@@ -30,9 +31,22 @@ boardDecoder =
     map2 (TrelloBoard False [] "") (field "id" string) (field "name" string)
 
 
+getListList : Model -> String -> Http.Request (List TrelloList)
+getListList model boardId =
+    Http.get (buildListUrl model boardId) (list listDecoder)
+
+
+buildListUrl : Model -> String -> String
+buildListUrl model boardId =
+    "https://api.trello.com/1/boards/"
+        ++ boardId
+        ++ "/lists?key=35a2be579776824775ad4d6f05d4852b&token="
+        ++ model.token
+
+
 listDecoder : Decoder TrelloList
 listDecoder =
-    Json.Decode.map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)
+    map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)
 
 
 updateLists : List TrelloList -> TrelloBoard -> TrelloBoard
@@ -50,17 +64,6 @@ updateLists lists board =
         { board
             | lists = allLists
         }
-
-
-decodeLists : String -> List TrelloList
-decodeLists payload =
-    case decodeString (list listDecoder) payload of
-        Ok lists ->
-            lists
-
-        Err message ->
-            Debug.log message
-                []
 
 
 updateCards : List TrelloCard -> TrelloList -> TrelloList

@@ -19,7 +19,7 @@ type Msg
     | IsAuthorized Bool
     | IsNotAuthorized Bool
     | BoardList (Result Http.Error (List TrelloBoard))
-    | ListList String
+    | ListList (Result Http.Error (List TrelloList))
     | CardList String
     | SelectBoard TrelloBoard
     | LocalStorageGot LocalStorage

@@ -2,6 +2,7 @@ module Update exposing (..)
 
 import BoardHelpers exposing (..)
 import Decoder exposing (..)
+import Http
 import List exposing (..)
 import Models exposing (..)
 import Models exposing (..)
@@ -26,12 +27,12 @@ update msg model =
         IsNotAuthorized _ ->
             ( { model | isAuthorized = False }, localStorageGet "trello_token" )
 
-        ListList lists ->
-            let
-                updatedLists =
-                    decodeLists lists
-            in
-                ( { model | boards = List.map (updateLists updatedLists) model.boards }, getListUpdateCommands updatedLists )
+        ListList (Ok lists) ->
+            ( { model | boards = List.map (updateLists lists) model.boards }, getListUpdateCommands lists )
+
+        ListList (Err e) ->
+            Debug.log (toString e)
+                ( model, Cmd.none )
 
         CardList payload ->
             let
@@ -61,6 +62,14 @@ update msg model =
             handleLocalStorageGot model ls
 
 
+getBoardCommands : Model -> TrelloBoard -> Maybe (Cmd Msg)
+getBoardCommands model board =
+    if board.show then
+        Just (Cmd.batch [ (Http.send ListList (getListList model board.id)), (getProgressFromStorageCmd board) ])
+    else
+        Nothing
+
+
 handleLocalStorageGot : Model -> LocalStorage -> ( Model, Cmd Msg )
 handleLocalStorageGot model ls =
     case ls.key of
@@ -72,21 +81,13 @@ handleLocalStorageGot model ls =
                 updatedBoards =
                     handleLocalStorageGotSetting model.boards ls
             in
-                ( { model | boards = updatedBoards }, getAfterStorageCommands ls updatedBoards )
+                ( { model | boards = updatedBoards }, getAfterStorageCommands model ls updatedBoards )
 
 
-getBoardCommands : TrelloBoard -> Maybe (Cmd msg)
-getBoardCommands board =
-    if board.show then
-        Just (Cmd.batch [ (trelloListLists board.id), (getProgressFromStorageCmd board) ])
-    else
-        Nothing
-
-
-getAfterStorageCommands : LocalStorage -> List TrelloBoard -> Cmd msg
-getAfterStorageCommands ls boards =
+getAfterStorageCommands : Model -> LocalStorage -> List TrelloBoard -> Cmd Msg
+getAfterStorageCommands model ls boards =
     getBoardByStorageKey boards ls.key
-        |> Maybe.andThen getBoardCommands
+        |> Maybe.andThen (getBoardCommands model)
         |> Maybe.withDefault Cmd.none
 
 

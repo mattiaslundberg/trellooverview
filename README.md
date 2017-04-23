@@ -12,3 +12,11 @@ Calculates the done and remaining times for a trello board depending on times ad
 3. Run `yarn elm-package install` to install all elm dependencies
 4. Run `yarn elm-reactor` to run local development server
 5. Run tests with `yarn elm-test -- --watch`
+
+
+# TODO
+
+ - [ ] Remove authorization through trello.js, use elm code instead
+ - [ ] Minimize the number of api-calls, get all lists and cards at the same time
+ - [ ] Add documentation inside the application
+ - [ ] Add github link in the application

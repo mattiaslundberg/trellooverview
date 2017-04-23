@@ -1,13 +1,11 @@
 module Update exposing (..)
 
-import Models exposing (..)
-import List exposing (..)
-import Ports exposing (..)
-import Models exposing (..)
-import Decoder exposing (..)
 import BoardHelpers exposing (..)
-import Json.Decode exposing (list)
-import Http
+import Decoder exposing (..)
+import List exposing (..)
+import Models exposing (..)
+import Models exposing (..)
+import Ports exposing (..)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -23,7 +21,7 @@ update msg model =
             ( { model | allowLogin = True }, trelloAuthorize "" )
 
         IsAuthorized _ ->
-            ( { model | isAuthorized = True }, trelloListBoards "" )
+            ( { model | isAuthorized = True }, getBoardListCmd { model | isAuthorized = True } )
 
         IsNotAuthorized _ ->
             ( { model | isAuthorized = False }, localStorageGet "trello_token" )
@@ -61,24 +59,6 @@ update msg model =
 
         LocalStorageGot ls ->
             handleLocalStorageGot model ls
-
-
-getBoardListCmd : Model -> Cmd Msg
-getBoardListCmd model =
-    if model.isAuthorized then
-        Http.send BoardList (getBoardList model)
-    else
-        Cmd.none
-
-
-getBoardList : Model -> Http.Request (List TrelloBoard)
-getBoardList model =
-    Http.get (buildBoardUrl model) (list boardDecoder)
-
-
-buildBoardUrl : Model -> String
-buildBoardUrl model =
-    "https://api.trello.com/1/members/me/boards?key=35a2be579776824775ad4d6f05d4852b&fields=name%2C%20id&token=" ++ model.token
 
 
 handleLocalStorageGot : Model -> LocalStorage -> ( Model, Cmd Msg )

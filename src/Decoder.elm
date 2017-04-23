@@ -1,25 +1,33 @@
 module Decoder exposing (..)
 
-import Models exposing (..)
+import Http
+import Json.Decode exposing (..)
 import List exposing (filter, append)
 import List.Extra exposing (uniqueBy)
-import Json.Decode exposing (..)
+import Models exposing (..)
+
+
+getBoardListCmd : Model -> Cmd Msg
+getBoardListCmd model =
+    if model.isAuthorized then
+        Http.send BoardList (getBoardList model)
+    else
+        Cmd.none
+
+
+getBoardList : Model -> Http.Request (List TrelloBoard)
+getBoardList model =
+    Http.get (buildBoardUrl model) (list boardDecoder)
+
+
+buildBoardUrl : Model -> String
+buildBoardUrl model =
+    "https://api.trello.com/1/members/me/boards?key=35a2be579776824775ad4d6f05d4852b&fields=name%2C%20id&token=" ++ model.token
 
 
 boardDecoder : Decoder TrelloBoard
 boardDecoder =
     map2 (TrelloBoard False [] "") (field "id" string) (field "name" string)
-
-
-decodeBoards : String -> List TrelloBoard
-decodeBoards payload =
-    case decodeString (list boardDecoder) payload of
-        Ok val ->
-            val
-
-        Err message ->
-            Debug.log message
-                []
 
 
 listDecoder : Decoder TrelloList

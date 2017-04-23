@@ -13,21 +13,7 @@ import Decoder exposing (..)
 all : Test
 all =
     describe "Test json decoder"
-        [ test "Get board list" <|
-            \() ->
-                let
-                    json =
-                        "[{\"id\": \"someid\", \"name\": \"somename\"}]"
-                in
-                    Expect.equal
-                        [ TrelloBoard False [] "" "someid" "somename" ]
-                        (decodeBoards json)
-        , fuzz string "No bords in random string" <|
-            \s ->
-                s
-                    |> decodeBoards
-                    |> Expect.equal []
-        , test "Get List list" <|
+        [ test "Get List list" <|
             \() ->
                 let
                     json =

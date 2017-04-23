@@ -1,14 +1,9 @@
 module BoardHelperTests exposing (..)
 
-import Array
-import Expect
-import String
-import Test exposing (..)
-import Fuzz exposing (string)
-import Models exposing (..)
-import Views exposing (..)
-import Decoder exposing (..)
 import BoardHelpers exposing (..)
+import Expect
+import Models exposing (..)
+import Test exposing (..)
 
 
 all : Test

@@ -1,9 +1,9 @@
-module DecoderTests exposing (..)
+module TrelloApiTests exposing (..)
 
 import Expect
 import Test exposing (..)
 import Models exposing (..)
-import Decoder exposing (..)
+import TrelloApi exposing (..)
 import Json.Decode exposing (decodeString, list)
 
 

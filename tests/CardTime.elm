@@ -1,8 +1,6 @@
 module CardTime exposing (..)
 
-import Array
 import Expect
-import String
 import Test exposing (..)
 import Models exposing (..)
 import Views exposing (..)

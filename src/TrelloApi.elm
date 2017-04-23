@@ -1,4 +1,4 @@
-module Decoder exposing (..)
+module TrelloApi exposing (..)
 
 import Http
 import Json.Decode exposing (..)

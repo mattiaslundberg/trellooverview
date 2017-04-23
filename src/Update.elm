@@ -1,7 +1,7 @@
 module Update exposing (..)
 
 import BoardHelpers exposing (..)
-import Decoder exposing (..)
+import TrelloApi exposing (..)
 import Http
 import List exposing (..)
 import Models exposing (..)

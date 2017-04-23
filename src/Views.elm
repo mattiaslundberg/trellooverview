@@ -194,7 +194,7 @@ displayFooter =
         , div [ class "documentation" ]
             [ a
                 [ tabindex -1
-                , href "https://github.com/mattiaslundberg/trellooverview/blobs/master/DOCS.md"
+                , href "https://github.com/mattiaslundberg/trellooverview/blob/master/DOCS.md"
                 ]
                 [ text "Documentation" ]
             ]

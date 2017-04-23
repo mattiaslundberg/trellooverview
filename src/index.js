@@ -40,21 +40,6 @@ window.onload = function () {
     })
   })
 
-  app.ports.trelloListCards.subscribe(function(id) {
-    console.log("list cards for list", id)
-    Trello.get(
-      "/lists/" + id + "/cards",
-      {},
-      function(cards) {
-        app.ports.trelloCards.send(JSON.stringify(cards))
-      },
-      function(error) {
-        console.log(error)
-      }
-    )
-  })
-
-
   // Connect localStorage to application
   app.ports.localStorageSet.subscribe(function(ls) {
     localStorage.setItem(ls.key, ls.value)

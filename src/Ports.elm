@@ -15,12 +15,6 @@ port trelloIsNotAuthorized : (Bool -> msg) -> Sub msg
 port trelloAuthorize : String -> Cmd msg
 
 
-port trelloListCards : String -> Cmd msg
-
-
-port trelloCards : (String -> msg) -> Sub msg
-
-
 port localStorageSet : LocalStorage -> Cmd msg
 
 

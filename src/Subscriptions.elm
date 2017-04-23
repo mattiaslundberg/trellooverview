@@ -11,6 +11,5 @@ subscriptions model =
         [ trelloIsAuthorized IsAuthorized
         , trelloIsNotAuthorized IsNotAuthorized
         , localStorageGot LocalStorageGot
-        , trelloCards CardList
         , every minute Update
         ]

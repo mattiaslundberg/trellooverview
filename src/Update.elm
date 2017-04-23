@@ -28,18 +28,22 @@ update msg model =
             ( { model | isAuthorized = False }, localStorageGet "trello_token" )
 
         ListList (Ok lists) ->
-            ( { model | boards = List.map (updateLists lists) model.boards }, getListUpdateCommands lists )
+            ( { model | boards = List.map (updateLists lists) model.boards }, getListUpdateCommands model lists )
 
         ListList (Err e) ->
             Debug.log (toString e)
                 ( model, Cmd.none )
 
-        CardList payload ->
+        CardList (Ok cards) ->
             let
                 updatedBoards =
-                    List.map (updateBoardWithCard (decodeCards payload)) model.boards
+                    List.map (updateBoardWithCard cards) model.boards
             in
                 ( { model | boards = updatedBoards }, Cmd.none )
+
+        CardList (Err e) ->
+            Debug.log (toString e)
+                ( model, Cmd.none )
 
         BoardList (Ok updatedBoards) ->
             ( { model | boards = updatedBoards }, getBoardListCommands updatedBoards )
@@ -129,11 +133,11 @@ handleLocalStorageGotRe boards ls =
             boards
 
 
-getListUpdateCommands : List TrelloList -> Cmd msg
-getListUpdateCommands lists =
+getListUpdateCommands : Model -> List TrelloList -> Cmd Msg
+getListUpdateCommands model lists =
     lists
         |> map .id
-        |> map trelloListCards
+        |> map (getCardListCmd model)
         |> Cmd.batch
 
 

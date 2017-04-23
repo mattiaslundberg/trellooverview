@@ -35,6 +35,6 @@ all =
                         "[{\"id\": \"id\", \"name\": \"name\", \"idList\": \"list\", \"idBoard\": \"board\"}]"
                 in
                     Expect.equal
-                        [ TrelloCard "id" "name" "list" "board" ]
-                        (decodeCards json)
+                        (Ok [ TrelloCard "id" "name" "list" "board" ])
+                        (decodeString (list cardDecoder) json)
         ]

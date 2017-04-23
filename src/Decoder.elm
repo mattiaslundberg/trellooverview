@@ -49,6 +49,29 @@ listDecoder =
     map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)
 
 
+getCardListCmd : Model -> String -> Cmd Msg
+getCardListCmd model listId =
+    Http.send CardList (getCardList model listId)
+
+
+getCardList : Model -> String -> Http.Request (List TrelloCard)
+getCardList model listId =
+    Http.get (buildCardUrl model listId) (list cardDecoder)
+
+
+buildCardUrl : Model -> String -> String
+buildCardUrl model listId =
+    "https://api.trello.com/1/lists/"
+        ++ listId
+        ++ "/cards?key=35a2be579776824775ad4d6f05d4852b&token="
+        ++ model.token
+
+
+cardDecoder : Decoder TrelloCard
+cardDecoder =
+    map4 TrelloCard (field "id" string) (field "name" string) (field "idList" string) (field "idBoard" string)
+
+
 updateLists : List TrelloList -> TrelloBoard -> TrelloBoard
 updateLists lists board =
     let
@@ -81,19 +104,3 @@ updateCards cards list =
 updateBoardWithCard : List TrelloCard -> TrelloBoard -> TrelloBoard
 updateBoardWithCard cards board =
     { board | lists = List.map (updateCards cards) board.lists }
-
-
-decodeCards : String -> List TrelloCard
-decodeCards payload =
-    case decodeString (list cardDecoder) payload of
-        Ok cards ->
-            cards
-
-        Err message ->
-            Debug.log message
-                []
-
-
-cardDecoder : Decoder TrelloCard
-cardDecoder =
-    map4 TrelloCard (field "id" string) (field "name" string) (field "idList" string) (field "idBoard" string)

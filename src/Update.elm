@@ -27,6 +27,13 @@ update msg model =
         IsNotAuthorized _ ->
             ( { model | isAuthorized = False }, localStorageGet "trello_token" )
 
+        BoardList (Ok updatedBoards) ->
+            ( { model | boards = updatedBoards }, getBoardListCommands updatedBoards )
+
+        BoardList (Err e) ->
+            Debug.log (toString e)
+                ( model, Cmd.none )
+
         ListList (Ok lists) ->
             ( { model | boards = List.map (updateLists lists) model.boards }, getListUpdateCommands model lists )
 
@@ -42,13 +49,6 @@ update msg model =
                 ( { model | boards = updatedBoards }, Cmd.none )
 
         CardList (Err e) ->
-            Debug.log (toString e)
-                ( model, Cmd.none )
-
-        BoardList (Ok updatedBoards) ->
-            ( { model | boards = updatedBoards }, getBoardListCommands updatedBoards )
-
-        BoardList (Err e) ->
             Debug.log (toString e)
                 ( model, Cmd.none )
 

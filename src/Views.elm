@@ -1,8 +1,8 @@
 module Views exposing (..)
 
 import Models exposing (..)
-import Html exposing (Html, button, div, text, span, program, table, tr, td, input)
-import Html.Attributes exposing (style, class, classList, type_, checked, value)
+import Html exposing (Html, button, div, text, span, program, table, tr, td, input, a)
+import Html.Attributes exposing (..)
 import Html.Events exposing (onClick, onInput)
 import List exposing (map, length, sum, length)
 import Regex exposing (..)
@@ -38,7 +38,7 @@ cardCount : TrelloBoard -> Int
 cardCount board =
     let
         cards =
-            (map (\l -> (length l.cards)) board.lists)
+            (List.map (\l -> (length l.cards)) board.lists)
     in
         sum cards
 
@@ -176,6 +176,31 @@ displaySettings model =
         div [] []
 
 
+displayFooter : Html Msg
+displayFooter =
+    div
+        [ class "footer"
+        ]
+        [ div [ class "copyright" ]
+            [ text "© 2017 "
+            , a
+                [ tabindex
+                    -1
+                , href
+                    "https://mlundberg.se"
+                ]
+                [ text "Mattias Lundberg" ]
+            ]
+        , div [ class "documentation" ]
+            [ a
+                [ tabindex -1
+                , href "https://github.com/mattiaslundberg/trellooverview/blobs/master/DOCS.md"
+                ]
+                [ text "Documentation" ]
+            ]
+        ]
+
+
 view : Model -> Html Msg
 view model =
     if model.isAuthorized then
@@ -185,6 +210,7 @@ view model =
             , (displaySettings model)
             , div [ class "summary-wrapper" ]
                 (List.map displayTimeSummary (getBoardsToShow model.boards))
+            , displayFooter
             ]
     else
         div
@@ -194,4 +220,5 @@ view model =
                 , onClick Authorize
                 ]
                 [ text "Login" ]
+            , displayFooter
             ]

@@ -44,32 +44,18 @@ buildListUrl model boardId =
     "https://api.trello.com/1/boards/"
         ++ boardId
         ++ "/lists?key=35a2be579776824775ad4d6f05d4852b"
+        ++ "&cards=open"
         ++ "&token="
         ++ model.token
 
 
 listDecoder : Decoder TrelloList
 listDecoder =
-    map3 (TrelloList []) (field "name" string) (field "id" string) (field "idBoard" string)
-
-
-getCardListCmd : Model -> String -> Cmd Msg
-getCardListCmd model listId =
-    Http.send CardList (getCardList model listId)
-
-
-getCardList : Model -> String -> Http.Request (List TrelloCard)
-getCardList model listId =
-    Http.get (buildCardUrl model listId) (list cardDecoder)
-
-
-buildCardUrl : Model -> String -> String
-buildCardUrl model listId =
-    "https://api.trello.com/1/lists/"
-        ++ listId
-        ++ "/cards?key=35a2be579776824775ad4d6f05d4852b"
-        ++ "&token="
-        ++ model.token
+    map4 TrelloList
+        (field "cards" (list cardDecoder))
+        (field "name" string)
+        (field "id" string)
+        (field "idBoard" string)
 
 
 cardDecoder : Decoder TrelloCard
@@ -92,20 +78,3 @@ updateLists lists board =
         { board
             | lists = allLists
         }
-
-
-updateBoardWithCard : List TrelloCard -> TrelloBoard -> TrelloBoard
-updateBoardWithCard cards board =
-    { board | lists = List.map (updateCards cards) board.lists }
-
-
-updateCards : List TrelloCard -> TrelloList -> TrelloList
-updateCards cards list =
-    let
-        cardsWithDuplicates =
-            filter (\c -> c.listId == list.id) (append list.cards cards)
-
-        allCards =
-            uniqueBy (\c -> c.id) cardsWithDuplicates
-    in
-        { list | cards = allCards }

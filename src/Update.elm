@@ -35,20 +35,9 @@ update msg model =
                 ( model, Cmd.none )
 
         ListList (Ok lists) ->
-            ( { model | boards = List.map (updateLists lists) model.boards }, getListUpdateCommands model lists )
+            ( { model | boards = List.map (updateLists lists) model.boards }, Cmd.none )
 
         ListList (Err e) ->
-            Debug.log (toString e)
-                ( model, Cmd.none )
-
-        CardList (Ok cards) ->
-            let
-                updatedBoards =
-                    List.map (updateBoardWithCard cards) model.boards
-            in
-                ( { model | boards = updatedBoards }, Cmd.none )
-
-        CardList (Err e) ->
             Debug.log (toString e)
                 ( model, Cmd.none )
 
@@ -131,14 +120,6 @@ handleLocalStorageGotRe boards ls =
 
         Nothing ->
             boards
-
-
-getListUpdateCommands : Model -> List TrelloList -> Cmd Msg
-getListUpdateCommands model lists =
-    lists
-        |> map .id
-        |> map (getCardListCmd model)
-        |> Cmd.batch
 
 
 getBoardListCommands : List TrelloBoard -> Cmd msg

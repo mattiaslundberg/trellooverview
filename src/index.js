@@ -40,19 +40,6 @@ window.onload = function () {
     })
   })
 
-  app.ports.trelloListBoards.subscribe(function() {
-    Trello.get(
-      "/members/me/boards",
-      {fields: "name, id"},
-      function(boards) {
-        app.ports.trelloBoards.send(JSON.stringify(boards))
-      },
-      function(error) {
-        console.log(error)
-      }
-    )
-  })
-
   app.ports.trelloListLists.subscribe(function(id) {
     console.log("list lists for board", id)
     Trello.get(

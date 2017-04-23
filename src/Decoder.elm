@@ -22,7 +22,10 @@ getBoardList model =
 
 buildBoardUrl : Model -> String
 buildBoardUrl model =
-    "https://api.trello.com/1/members/me/boards?key=35a2be579776824775ad4d6f05d4852b&fields=name%2C%20id&token="
+    "https://api.trello.com/1/members/me"
+        ++ "/boards?key=35a2be579776824775ad4d6f05d4852b"
+        ++ "&fields=name%2C%20id"
+        ++ "&token="
         ++ model.token
 
 
@@ -40,7 +43,8 @@ buildListUrl : Model -> String -> String
 buildListUrl model boardId =
     "https://api.trello.com/1/boards/"
         ++ boardId
-        ++ "/lists?key=35a2be579776824775ad4d6f05d4852b&token="
+        ++ "/lists?key=35a2be579776824775ad4d6f05d4852b"
+        ++ "&token="
         ++ model.token
 
 
@@ -63,7 +67,8 @@ buildCardUrl : Model -> String -> String
 buildCardUrl model listId =
     "https://api.trello.com/1/lists/"
         ++ listId
-        ++ "/cards?key=35a2be579776824775ad4d6f05d4852b&token="
+        ++ "/cards?key=35a2be579776824775ad4d6f05d4852b"
+        ++ "&token="
         ++ model.token
 
 
@@ -89,6 +94,11 @@ updateLists lists board =
         }
 
 
+updateBoardWithCard : List TrelloCard -> TrelloBoard -> TrelloBoard
+updateBoardWithCard cards board =
+    { board | lists = List.map (updateCards cards) board.lists }
+
+
 updateCards : List TrelloCard -> TrelloList -> TrelloList
 updateCards cards list =
     let
@@ -99,8 +109,3 @@ updateCards cards list =
             uniqueBy (\c -> c.id) cardsWithDuplicates
     in
         { list | cards = allCards }
-
-
-updateBoardWithCard : List TrelloCard -> TrelloBoard -> TrelloBoard
-updateBoardWithCard cards board =
-    { board | lists = List.map (updateCards cards) board.lists }

@@ -7,11 +7,11 @@ Calculates the done and remaining times for a trello board depending on times ad
 
 # Getting started (development)
 
-1. Install `node` and `yarn`
-2. Run `yarn` to install elm
-3. Run `yarn elm-package install` to install all elm dependencies
-4. Run `yarn elm-reactor` to run local development server
-5. Run tests with `yarn elm-test -- --watch`
+1. Install `asdf` and `asdf-nodejs`
+2. Run `asdf install` to install the correct elm version
+3. Run `npm run package -- install` to install all elm dependencies
+4. Run `npm run reactor` to run local development server
+5. Run tests with `npm run test` or `npm run test-watch`
 
 
 # TODO

@@ -11,5 +11,11 @@
     "elm-test": "^0.18.2",
     "js-beautify": "^1.6.12",
     "uglify-js": "^2.8.22"
+  },
+  "scripts": {
+    "test": "elm-test",
+    "test-watch": "elm-test --watch",
+    "reactor": "elm-reactor",
+    "package": "elm-package"
   }
 }
